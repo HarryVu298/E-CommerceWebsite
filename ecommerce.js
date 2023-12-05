@@ -1,10 +1,10 @@
 // ecommerce.js
 $(document).ready(function() {
     $('#filter-button').click(function() {
-        // If inputs are empty, use '%' as a wildcard to match any value
         var category = $('#category-input').val() || '%';
-        var subcategory = $('#subcategory-input').val() || '%';
-        var id = '0'; // Assuming '0' will fetch all products, adjust as needed
+        var minPrice = $('#min-price-input').val() || 'NULL';
+        var maxPrice = $('#max-price-input').val() || 'NULL';
+        var sort = $('#sort-input').val() || 'NULL';
 
         $.ajax({
             url: 'http://172.17.12.44/cse383_final/final.php/getProduct',
@@ -12,8 +12,9 @@ $(document).ready(function() {
             dataType: 'json',
             data: {
                 category: category,
-                subcategory: subcategory,
-                id: id
+                minPrice: minPrice,
+                maxPrice: maxPrice,
+                sort: sort
             }
         }).done(function(response) {
             if (!Array.isArray(response.result)) {

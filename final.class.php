@@ -57,12 +57,37 @@ class final_rest
 
 
 
-       public static function getProduct ($category, $subcategory, $id)
+       public static function getProduct ($category, $minPrice, $maxPrice, $sort)
 
         {
                
                         try {
-                                $retData["result"] = GET_SQL("select * from product where category like ? and subcategory like ? and (product_id = ? or ? = '0') order by description", $category,$subcategory,$id,$id);
+							$query = "SELECT * FROM product WHERE ";
+							$params = [];
+					
+							if (!empty($category)) {
+								$query .= "category LIKE ?";
+								array_push($params, $category);
+							}
+							if (!$minPrice == 'NULL') {
+								$query .= " AND price >= ?";
+								array_push($params, $minPrice);
+							}
+					
+							if (!$maxPrice== 'NULL') {
+								$query .= " AND price <= ?";
+								array_push($params, $maxPrice);
+							}
+					
+							if ($sort == "price_asc") {
+								$query .= " ORDER BY price ASC";
+							} elseif ($sort == "price_desc") {
+								$query .= " ORDER BY price DESC";
+							} elseif ($sort == "category") {
+								$query .= " ORDER BY category";
+							}
+					
+							$retData["result"] = GET_SQL($query, ...$params);
                         }
                         catch  (Exception $e) {
                                 $retData["status"]=1;
