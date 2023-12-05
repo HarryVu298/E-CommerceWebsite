@@ -1,0 +1,7 @@
+#shoppingcart {
+    position: absolute;
+    right: 0;
+}
+.nav-item.active {
+    font-weight: bold;
+}
