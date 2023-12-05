@@ -5,3 +5,25 @@
 .nav-item.active {
     font-weight: bold;
 }
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
+    color: #212529;
+}
+
+h1, h2, h3 {
+    color: #3089e8;
+}
+
+
+.container {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.img-fluid {
+    width: auto;
+    height: 200px;
+    border-radius: 10px;
+}
