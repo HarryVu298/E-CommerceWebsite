@@ -1,7 +1,7 @@
 // ecommerce.js
 $(document).ready(function() {
     $('#filter-button').click(function() {
-        var category = $('#category-input').val() || '%';
+        var subcategory = $('#subcategory-input').val() || '%';
         var minPrice = $('#min-price-input').val() || 'NULL';
         var maxPrice = $('#max-price-input').val() || 'NULL';
         var sort = $('#sort-input').val() || 'NULL';
@@ -11,13 +11,13 @@ $(document).ready(function() {
             method: 'GET',
             dataType: 'json',
             data: {
-                category: category,
+                subcategory: subcategory,
                 minPrice: minPrice,
                 maxPrice: maxPrice,
                 sort: sort
             }
         }).done(function(response) {
-            if (!response.result) {
+            if (!Array.isArray(response.result)) {
                 alert("No products found.");
                 return;
             }
