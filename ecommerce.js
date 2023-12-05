@@ -17,7 +17,7 @@ $(document).ready(function() {
                 sort: sort
             }
         }).done(function(response) {
-            if (!Array.isArray(response.result)) {
+            if (!response.result) {
                 alert("No products found.");
                 return;
             }
