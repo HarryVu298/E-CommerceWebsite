@@ -59,6 +59,7 @@ function addItemToCart(productID, qty) {
             if (cartID === "NULL") {
                 cartID = response.newCartID; 
             }
+            alert("Item added to cart successfully!");
         } else {
             alert(response.message);
         }
