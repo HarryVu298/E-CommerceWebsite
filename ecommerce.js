@@ -67,3 +67,5 @@ function addItemToCart(productID, qty) {
         console.log("Error adding to cart:", error.statusText);
     });
 }
+
+  
