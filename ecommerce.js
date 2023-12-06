@@ -75,6 +75,7 @@ $(document).ready(function() {
                         <td>${item.description}</td>
                         <td>${item.subcategory}</td>
                         <td>${item.Qty}</td>
+                        <td>$${item.price}</td>
                         <td><button class="btn btn-primary remove-items-button" onclick="#">Delete</button></td>
                     </tr>`;
                 });
@@ -132,9 +133,3 @@ function updateCartDisplay() {
         console.log("AJAX error fetching cart details:", error.statusText);
     });
 }
-
-
-
-
-
-  
