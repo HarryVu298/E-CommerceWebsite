@@ -76,7 +76,7 @@ $(document).ready(function() {
                         <td>${item.subcategory}</td>
                         <td>${item.Qty}</td>
                         <td>$${item.price}</td>
-                        <td><button class="btn btn-primary remove-items-button" onclick="#">Delete</button></td>
+                        <td><button class="btn btn-primary remove-items-button" onclick="removeItemFromCart('${cartID}', '${item.product_id}')">Delete</button></td>
                     </tr>`;
                 });
                 $("#product-table tbody").html(tableHtml);
@@ -131,5 +131,26 @@ function updateCartDisplay() {
         }
     }).fail(function(error) {
         console.log("AJAX error fetching cart details:", error.statusText);
+    });
+}
+
+function removeItemFromCart(cartID, productID) {
+    $.ajax({
+        url: 'http://172.17.12.44/cse383_final/final.php/RemoveitemFromCart',
+        method: 'POST',
+        dataType: 'json',
+        data: {
+            cartID: cartID,
+            productID: productID
+        }
+    }).done(function(response) {
+        if (response.found === 0) {
+            alert("Item removed from cart successfully!");
+            updateCartDisplay();
+        } else {
+            alert(response.message);
+        }
+    }).fail(function(error) {
+        console.log("Error removing item from cart:", error.statusText);
     });
 }
