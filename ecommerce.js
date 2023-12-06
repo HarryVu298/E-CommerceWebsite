@@ -57,7 +57,7 @@ function addItemToCart(productID, qty) {
     }).done(function(response) {
         if (response.found === 0) {
             if (cartID === "NULL") {
-                cartID = response["created"][0]["cartID"];
+                cartID = response.newCartID; 
             }
         } else {
             alert(response.message);

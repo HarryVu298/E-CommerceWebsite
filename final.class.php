@@ -123,7 +123,8 @@ class final_rest
         if ($cartID === "NULL") {
             EXEC_SQL("INSERT INTO cart (closedDateTime) VALUES (NULL)");
             $retData["created"] = GET_SQL("SELECT last_insert_rowid() as cartID");
-            $cartID = $retData["created"][0]["cartID"]; 
+            $cartID = $retData["created"][0]["cartID"];
+            $retData["newCartID"] = $cartID; 
         }
         try {
             $cart = GET_SQL("SELECT cartID FROM cart WHERE cartID = ? AND closedDateTime IS NULL", $cartID);
