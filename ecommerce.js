@@ -1,3 +1,4 @@
+var cartID = "NULL";
 // ecommerce.js
 $(document).ready(function() {
     $('#filter-button').click(function() {
@@ -26,15 +27,13 @@ $(document).ready(function() {
             response.result.forEach(function(product) {
                 tableHtml += 
                     `<tr>
-                        <td>${product.product_id}</td>
                         <td>${product.title}</td>
                         <td>${product.price}</td>
                         <td>${product.description}</td>
                         <td>${product.category}</td>
-                        <td>${product.rating || 'N/A'}</td>
-                        <td>${product.count || 'N/A'}</td>
                         <td><img src="${product.image}" alt="${product.title}" style="width: 100px; height: auto;"></td>
                         <td>${product.subcategory}</td>
+                        <td><button class="btn btn-primary add-to-cart-button" onclick="addItemToCart(${product.product_id}, 1)">Add to Cart</button></td>
                     </tr>`;
             });
 
@@ -43,4 +42,27 @@ $(document).ready(function() {
             console.log("error",error.statusText);
         });
     });
+    
 });
+function addItemToCart(productID, qty) {
+    $.ajax({
+        url: 'http://172.17.12.44/cse383_final/final.php/addItemToCart',
+        method: 'POST',
+        dataType: 'json',
+        data: {
+            cartID: cartID,
+            productID: productID,
+            qty: qty
+        }
+    }).done(function(response) {
+        if (response.found === 0) {
+            if (cartID === "NULL") {
+                cartID = response["created"][0]["cartID"];
+            }
+        } else {
+            alert(response.message);
+        }
+    }).fail(function(error) {
+        console.log("Error adding to cart:", error.statusText);
+    });
+}

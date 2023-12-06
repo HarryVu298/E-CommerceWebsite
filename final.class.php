@@ -69,15 +69,20 @@ class final_rest
 								$query .= "subcategory LIKE ?";
 								array_push($params, $subcategory);
 							}
-							if (!$minPrice == 'NULL') {
+							if ($minPrice != 'NULL') {
+								// $minPrice = float($minPrice);	
 								$query .= " AND price >= ?";
 								array_push($params, $minPrice);
 							}
 					
-							if (!$maxPrice== 'NULL') {
+							if ($maxPrice!= 'NULL') {
+								// $maxPrice = float($maxPrice);
 								$query .= " AND price <= ?";
 								array_push($params, $maxPrice);
 							}
+							
+							$query .= " AND description <> '' AND image <> ''";
+
 					
 							if ($sort == "price_asc") {
 								$query .= " ORDER BY price ASC";
@@ -86,7 +91,8 @@ class final_rest
 							} elseif ($sort == "subcategory") {
 								$query .= " ORDER BY subcategory";
 							}
-					
+                            $retData["debug1"]=print_r($query, true);
+                            $retData["debug2"]=print_r($params, true);
 							$retData["result"] = GET_SQL($query, ...$params);
                         }
                         catch  (Exception $e) {
@@ -97,6 +103,51 @@ class final_rest
 
                 return json_encode ($retData);
        }
+
+
+	//    public static function createShoppingCart() {
+    //         try {
+    //             EXEC_SQL("INSERT INTO cart (closedDateTime) VALUES (NULL)");
+    //             $retData["result"] = GET_SQL("SELECT last_insert_rowid() as cartID");
+    //             $retData["status"] = 0;
+    //             $retData["message"] = "Cart created";
+    //             $retData["cartID"] = $retData["result"][0]["cartID"];
+    //         } catch (Exception $e) {
+    //             $retData["status"] = 1;
+    //             $retData["message"] = $e->getMessage();
+    //         }
+    //         return json_encode($retData);
+    //     }
+
+    public static function addItemToCart($cartID, $productID, $Qty) {
+        if ($cartID === "NULL") {
+            EXEC_SQL("INSERT INTO cart (closedDateTime) VALUES (NULL)");
+            $retData["created"] = GET_SQL("SELECT last_insert_rowid() as cartID");
+            $cartID = $retData["created"][0]["cartID"]; 
+        }
+        try {
+            $cart = GET_SQL("SELECT cartID FROM cart WHERE cartID = ? AND closedDateTime IS NULL", $cartID);
+            if (count($cart) > 0) {
+                $item = GET_SQL("SELECT * FROM cartItem WHERE cartID = ? AND product_id = ?", $cartID, $productID);
+                if (count($item) > 0) {
+                    EXEC_SQL("UPDATE cartItem SET qty = qty + ? WHERE cartID = ? AND product_id = ?", $Qty, $cartID, $productID);
+                    $retData["found"] = 0;
+                    $retData["message"] = "Existing product $productID set to $Qty";
+                } else {
+                    EXEC_SQL("INSERT INTO cartItem (Qty, cartID, Product_id) VALUES (?, ?, ?)", $Qty, $cartID, $productID);
+                    $retData["found"] = 0;
+                    $retData["message"] = "Product $productID added to cart with quantity = $Qty";
+                }
+            } else {
+                $retData["found"] = 1;
+                $retData["message"] = "Cart not found or not available";
+            }
+        } catch (Exception $e) {
+            $retData["status"] = 1;
+            $retData["message"] = $e->getMessage();
+        }
+        return json_encode($retData);
+    }
 }
 
 

@@ -32,4 +32,11 @@ h1, h2, h3 {
     text-align: center;
 }
 
+.add-to-cart-button {
+    background-color: green;
+    border-color: darkgreen;
+}
 
+.add-to-cart-button:hover {
+    background-color: darkgreen;
+}
