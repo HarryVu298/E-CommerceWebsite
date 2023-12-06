@@ -60,35 +60,46 @@ $(document).ready(function() {
     
 
     if(currentUrl.includes("cart.html") && cartID !== "NULL") {
-        $.ajax({
-            url: 'http://172.17.12.44/cse383_final/final.php/getCartItems',
-            method: 'GET',
-            dataType: 'json',
-            data: { cartID: cartID }
-        }).done(function(response) {
-            if (response.found === 0) {
-                var tableHtml = "";
-                response.cart.forEach(function(item) {
-                    tableHtml += `<tr>
-                        <td><img src="${item.image}" alt="${item.title}" style="width: 100px; height: auto;"></td>
-                        <td>${item.title}</td>
-                        <td>${item.description}</td>
-                        <td>${item.subcategory}</td>
-                        <td>${item.Qty}</td>
-                        <td>$${item.price}</td>
-                        <td><button class="btn btn-primary remove-items-button" onclick="removeItemFromCart('${cartID}', '${item.product_id}')">Delete</button></td>
-                    </tr>`;
-                });
-                $("#product-table tbody").html(tableHtml);
-            } else {
-                alert("Error loading cart items: " + response.message);
-            }
-        }).fail(function(error) {
-            console.log("Error fetching cart items:", error);
-        });
+        updateCartOverview();
     }
     
 });
+
+function updateCartOverview() {
+    $.ajax({
+        url: 'http://172.17.12.44/cse383_final/final.php/getCartItems',
+        method: 'GET',
+        dataType: 'json',
+        data: { cartID: cartID }
+    }).done(function(response) {
+        if (response.found === 0) {
+            var tableHtml = "";
+            response.cart.forEach(function(item) {
+                var quantityDropdown = '<select class="form-control quantity-select" data-product-id="' + item.product_id + '">';
+                for (var i = 1; i <= 30; i++) {
+                    quantityDropdown += `<option value="${i}" ${i == item.Qty ? 'selected' : ''}>${i}</option>`;
+                }
+                quantityDropdown += '</select>';
+
+                tableHtml += `<tr>
+                    <td><img src="${item.image}" alt="${item.title}" style="width: 100px; height: auto;"></td>
+                    <td>${item.title}</td>
+                    <td>${item.description}</td>
+                    <td>${item.subcategory}</td>
+                    <td>${quantityDropdown}</td>
+                    <td>$${item.price}</td>
+                    <td><button class="btn btn-primary remove-items-button" onclick="removeItemFromCart('${cartID}', '${item.product_id}')">Delete</button></td>
+                </tr>`;
+            });
+            $("#product-table tbody").html(tableHtml);
+        } else {
+            alert("Error loading cart items: " + response.message);
+        }
+    }).fail(function(error) {
+        console.log("Error fetching cart items:", error);
+    });
+}
+
 function addItemToCart(productID, button) {
     var qty = $(button).closest('tr').find('select').val();
     $.ajax({
@@ -126,6 +137,8 @@ function updateCartDisplay() {
         if (response.status === 0) {
             $("#item-count").text(response.itemCount);
             $("#total-amount").text(response.totalAmount);
+            $("#item-count-2").text(response.itemCount);
+            $("#total-amount-2").text("$"+response.totalAmount);
         } else {
             console.log("Error fetching cart details:", response.message);
         }
@@ -147,6 +160,7 @@ function removeItemFromCart(cartID, productID) {
         if (response.found === 0) {
             alert("Item removed from cart successfully!");
             updateCartDisplay();
+            updateCartOverview();
         } else {
             alert(response.message);
         }

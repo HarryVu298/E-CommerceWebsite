@@ -190,15 +190,20 @@ class final_rest
 
     public static function RemoveitemFromCart($cartID, $productID) {
         $found = GET_SQL("SELECT cart.cartID FROM cart JOIN cartItem USING (cartID) WHERE cart.cartID=? AND product_id = ? AND cart.closedDateTime IS NULL", $cartID, $productID);
-
-        if (count($found) > 0) {
-            EXEC_SQL("DELETE FROM cartItem WHERE cartID=? AND product_id=?", $cartID, $productID);
-            $retData["found"] = 0;
-            $retData["message"] = "Item removed successfully";
-        } else {
+        try {
+            if (count($found) > 0) {
+                EXEC_SQL("DELETE FROM cartItem WHERE cartID=? AND product_id=?", $cartID, $productID);
+                $retData["found"] = 0;
+                $retData["message"] = "Item removed successfully";
+            } else {
+                $retData["found"] = 1;
+                $retData["message"] = "Item not found in the cart";
+            }
+        } catch (Exception $e) {
             $retData["found"] = 1;
-            $retData["message"] = "Item not found in the cart";
+            $retData["message"] = $e->getMessage();
         }
+        
 
         return json_encode($retData);
     }
