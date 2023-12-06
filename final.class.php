@@ -127,6 +127,7 @@ class final_rest
             $retData["newCartID"] = $cartID; 
         }
         try {
+            $retData["Qty"] = $Qty;
             $cart = GET_SQL("SELECT cartID FROM cart WHERE cartID = ? AND closedDateTime IS NULL", $cartID);
             if (count($cart) > 0) {
                 $item = GET_SQL("SELECT * FROM cartItem WHERE cartID = ? AND product_id = ?", $cartID, $productID);
@@ -147,6 +148,27 @@ class final_rest
             $retData["status"] = 1;
             $retData["message"] = $e->getMessage();
         }
+        return json_encode($retData);
+    }
+
+    public static function getCartDetails($cartID) {
+        try {
+            $cartDetails = GET_SQL("SELECT SUM(Qty) as itemCount, SUM(Qty * price) as totalAmount FROM cartItem JOIN product ON cartItem.product_id = product.product_id WHERE cartID = ?", $cartID);
+    
+            if (!empty($cartDetails)) {
+                $retData["itemCount"] = $cartDetails[0]["itemCount"];
+                $retData["totalAmount"] = $cartDetails[0]["totalAmount"];
+                $retData["status"] = 0;
+            } else {
+                $retData["itemCount"] = 0;
+                $retData["totalAmount"] = 0.00;
+                $retData["status"] = 1;
+            }
+        } catch (Exception $e) {
+            $retData["status"] = 1;
+            $retData["message"] = $e->getMessage();
+        }
+    
         return json_encode($retData);
     }
 }

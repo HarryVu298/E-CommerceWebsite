@@ -23,6 +23,12 @@ $(document).ready(function() {
                 return;
             }
 
+            var quantityDropdown = '<select class="form-control">';
+            for (var i = 1; i <= 30; i++) {
+                quantityDropdown += '<option value="' + i + '">' + i + '</option>';
+            }
+            quantityDropdown += '</select>';
+
             var tableHtml = "";
             response.result.forEach(function(product) {
                 tableHtml += 
@@ -33,7 +39,8 @@ $(document).ready(function() {
                         <td>${product.category}</td>
                         <td><img src="${product.image}" alt="${product.title}" style="width: 100px; height: auto;"></td>
                         <td>${product.subcategory}</td>
-                        <td><button class="btn btn-primary add-to-cart-button" onclick="addItemToCart(${product.product_id}, 1)">Add to Cart</button></td>
+                        <td>${quantityDropdown}</td>
+                        <td><button class="btn btn-primary add-to-cart-button" onclick="addItemToCart(${product.product_id}, this)">Add to Cart</button></td>
                     </tr>`;
             });
 
@@ -44,7 +51,8 @@ $(document).ready(function() {
     });
     
 });
-function addItemToCart(productID, qty) {
+function addItemToCart(productID, button) {
+    var qty = $(button).closest('tr').find('select').val();
     $.ajax({
         url: 'http://172.17.12.44/cse383_final/final.php/addItemToCart',
         method: 'POST',
@@ -59,7 +67,8 @@ function addItemToCart(productID, qty) {
             if (cartID === "NULL") {
                 cartID = response.newCartID; 
             }
-            alert("Item added to cart successfully!");
+            updateCartDisplay();
+            alert(response.Qty + " items added to cart successfully!");
         } else {
             alert(response.message);
         }
@@ -67,5 +76,26 @@ function addItemToCart(productID, qty) {
         console.log("Error adding to cart:", error.statusText);
     });
 }
+
+function updateCartDisplay() {
+    $.ajax({
+        url: 'http://172.17.12.44/cse383_final/final.php/getCartDetails',
+        method: 'GET',
+        dataType: 'json',
+        data: { cartID: cartID }
+    }).done(function(response) {
+        if (response.status === 0) {
+            $("#item-count").text(response.itemCount);
+            $("#total-amount").text(response.totalAmount);
+        } else {
+            console.log("Error fetching cart details:", response.message);
+        }
+    }).fail(function(error) {
+        console.log("AJAX error fetching cart details:", error.statusText);
+    });
+}
+
+
+
 
   
