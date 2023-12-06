@@ -1,6 +1,10 @@
-var cartID = "NULL";
+var cartID = localStorage.getItem('cartID') || "NULL";;
 // ecommerce.js
 $(document).ready(function() {
+    var currentUrl = window.location.href;
+    updateCartDisplay();
+    console.log(cartID);
+   
     $('#filter-button').click(function() {
         var subcategory = $('#subcategory-input').val() || '%';
         var minPrice = $('#min-price-input').val() || 'NULL';
@@ -49,6 +53,39 @@ $(document).ready(function() {
             console.log("error",error.statusText);
         });
     });
+
+    if (currentUrl.includes("ecommerce.html")) {
+        $('#filter-button').click();
+    }
+    
+
+    if(currentUrl.includes("cart.html") && cartID !== "NULL") {
+        $.ajax({
+            url: 'http://172.17.12.44/cse383_final/final.php/getCartItems',
+            method: 'GET',
+            dataType: 'json',
+            data: { cartID: cartID }
+        }).done(function(response) {
+            if (response.found === 0) {
+                var tableHtml = "";
+                response.cart.forEach(function(item) {
+                    tableHtml += `<tr>
+                        <td><img src="${item.image}" alt="${item.title}" style="width: 100px; height: auto;"></td>
+                        <td>${item.title}</td>
+                        <td>${item.description}</td>
+                        <td>${item.subcategory}</td>
+                        <td>${item.Qty}</td>
+                        <td><button class="btn btn-primary remove-items-button" onclick="#">Delete</button></td>
+                    </tr>`;
+                });
+                $("#product-table tbody").html(tableHtml);
+            } else {
+                alert("Error loading cart items: " + response.message);
+            }
+        }).fail(function(error) {
+            console.log("Error fetching cart items:", error);
+        });
+    }
     
 });
 function addItemToCart(productID, button) {
@@ -65,7 +102,8 @@ function addItemToCart(productID, button) {
     }).done(function(response) {
         if (response.found === 0) {
             if (cartID === "NULL") {
-                cartID = response.newCartID; 
+                cartID = response.newCartID;
+                localStorage.setItem('cartID', cartID); 
             }
             updateCartDisplay();
             alert(response.Qty + " items added to cart successfully!");
@@ -94,6 +132,7 @@ function updateCartDisplay() {
         console.log("AJAX error fetching cart details:", error.statusText);
     });
 }
+
 
 
 

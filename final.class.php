@@ -33,27 +33,27 @@ class final_rest
  *     }
  *
  */
-	public static function setTemp ($location, $sensor, $value)
+	// public static function setTemp ($location, $sensor, $value)
 
-	{
-		if (!is_numeric($value)) {
-			$retData["status"]=1;
-			$retData["message"]="'$value' is not numeric";
-		}
-		else {
-			try {
-				EXEC_SQL("insert into temperature (location, sensor, value, date) values (?,?,?,CURRENT_TIMESTAMP)",$location, $sensor, $value);
-				$retData["status"]=0;
-				$retData["message"]="insert of '$value' for location: '$location' and sensor '$sensor' accepted";
-			}
-			catch  (Exception $e) {
-				$retData["status"]=1;
-				$retData["message"]=$e->getMessage();
-			}
-		}
+	// {
+	// 	if (!is_numeric($value)) {
+	// 		$retData["status"]=1;
+	// 		$retData["message"]="'$value' is not numeric";
+	// 	}
+	// 	else {
+	// 		try {
+	// 			EXEC_SQL("insert into temperature (location, sensor, value, date) values (?,?,?,CURRENT_TIMESTAMP)",$location, $sensor, $value);
+	// 			$retData["status"]=0;
+	// 			$retData["message"]="insert of '$value' for location: '$location' and sensor '$sensor' accepted";
+	// 		}
+	// 		catch  (Exception $e) {
+	// 			$retData["status"]=1;
+	// 			$retData["message"]=$e->getMessage();
+	// 		}
+	// 	}
 
-		return json_encode ($retData);
-	}
+	// 	return json_encode ($retData);
+	// }
 
 
 
@@ -155,7 +155,7 @@ class final_rest
         try {
             $cartDetails = GET_SQL("SELECT SUM(Qty) as itemCount, SUM(Qty * price) as totalAmount FROM cartItem JOIN product ON cartItem.product_id = product.product_id WHERE cartID = ?", $cartID);
     
-            if (!empty($cartDetails)) {
+            if ($cartDetails[0]["itemCount"] != "") {
                 $retData["itemCount"] = $cartDetails[0]["itemCount"];
                 $retData["totalAmount"] = $cartDetails[0]["totalAmount"];
                 $retData["status"] = 0;
@@ -166,6 +166,22 @@ class final_rest
             }
         } catch (Exception $e) {
             $retData["status"] = 1;
+            $retData["message"] = $e->getMessage();
+        }
+    
+        return json_encode($retData);
+    }
+
+    public static function getCartItems($cartID) {
+        try {
+            $retData["cart"]=GET_SQL("select * from cart join cartItem using (cartID)
+                                    join product using (Product_id)
+                                    where cart.cartID=? and cart.closedDateTime is null order by
+                                    Category,Subcategory,Title", $cartID);
+            $retData["found"] = 0;
+            $retData["message"]="Returned all items in cart $cartID";
+        } catch (Exception $e) {
+            $retData["found"] = 1;
             $retData["message"] = $e->getMessage();
         }
     
