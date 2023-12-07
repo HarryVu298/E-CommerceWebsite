@@ -1,4 +1,6 @@
+//localStorage.removeItem('cartID');
 var cartID = localStorage.getItem('cartID') || "NULL";
+console.log("cartID: ",cartID);
 var cartIDPrintOrder = localStorage.getItem('cartIDPrintOrder') || "NULL";
 // ecommerce.js
 $(document).ready(function () {
@@ -145,8 +147,9 @@ $(document).ready(function () {
         if (isValid) {
             localStorage.setItem('cartIDPrintOrder', cartID);
             window.open("printableOrder.html", "_blank");
-            window.open("homepage.html", "_self");
             makeSale();
+            localStorage.removeItem('cartID');
+            window.open("homepage.html", "_self");
         }
     });
     
@@ -404,31 +407,33 @@ function updateStateField() {
 }
 
 function toggleCardForm() {
-    var paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
-    var cardSelected = $('#paymentCard').checked;
+    var cardSelected = $('#paymentCard').is(':checked');
     var cardForm = $('#cardForm');
-    if (paymentMethod === 'card') {
-      cardForm.style.display = 'block';
+
+    if (cardSelected) {
+        cardForm.show();
     } else {
-      cardForm.style.display = 'none';
+        cardForm.hide(); 
     }
 
-    $('#cardNumber').required = cardSelected;
-    $('#cardName').required = cardSelected;
-    $('#expiryDate').required = cardSelected;
-    $('#cvv').required = cardSelected;
+    $('#cardNumber').prop('required', cardSelected);
+    $('#cardName').prop('required', cardSelected);
+    $('#expiryDate').prop('required', cardSelected);
+    $('#cvv').prop('required', cardSelected);
 }
 
+
 function makeSale() {
+    console.log("makeSale() is called");
     $.ajax({
         url: 'final.php/makeSale',
         method: 'POST',
         dataType: 'json',
         data: { cartID: cartID }
     }).done(function (response) {
-        if (response.found === 0) {
+        if (response.found == 0) {
             cartID = "NULL";
-            localStorage.setItem('cartID', cartID);
+            console.log("Hello CartID: ", cartID);
             updateCartDisplay();
             alert("Thank you for shopping with Harryzon!");
         } else {
@@ -471,3 +476,43 @@ function updatePrintableOrder() {
         console.log("Error fetching cart items:", error);
     });
 }
+
+function filterOrders() {
+    var startDate = $('#startDate').val() || " ";
+    var endDate = $('#endDate').val() || " ";
+  
+    $.ajax({
+      url: 'http://172.17.12.44/cse383_final/final.php/FindClosedCarts',
+      method: 'GET',
+      dataType: 'json',
+      data: { 
+        startDate: startDate,
+        endDate: endDate
+      }
+    }).done(function(response) {
+      updateOrdersTable(response.result);
+    }).fail(function(error) {
+      console.log("Error loading filtered orders:", error);
+    });
+}
+
+function updateOrdersTable(result) {
+    
+    var tableHtml = "";
+    result.forEach(function(order) {
+        tableHtml += `<tr>
+                    <td>${order.cartID}</td>
+                    <td>${order.closedDateTime}</td>
+                    <td><button onclick="viewOrderDetails(${order.cartID})">Details</button></td>
+                    <td><button onclick="printOrder(${order.cartID})">Print</button></td>
+                </tr>`;
+    })
+
+    $("#closedOrdersTable").html(tableHtml);
+}
+
+function printOrder(cartID) {
+    localStorage.setItem('cartIDPrintOrder', cartID); 
+    window.open("printableOrder.html", "_blank");
+}
+  

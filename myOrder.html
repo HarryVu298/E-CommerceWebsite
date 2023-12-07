@@ -53,10 +53,15 @@
     <div class="container mt-4">
       <h2>Closed Orders</h2>
       <div class="mb-4">
-        <label for="dateFilter">Filter by Date:</label>
-        <input type="date" id="dateFilter" class="form-control">
+        <label for="startDate">Start Date:</label>
+        <input type="date" id="startDate" class="form-control">
+      
+        <label for="endDate" class="mt-2">End Date:</label>
+        <input type="date" id="endDate" class="form-control">
+      
         <button onclick="filterOrders()" class="btn btn-primary mt-2">Filter</button>
       </div>
+      
     
       <!-- Closed Orders Table -->
       <table class="table">

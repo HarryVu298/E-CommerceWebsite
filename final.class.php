@@ -120,7 +120,7 @@ class final_rest
     //     }
 
     public static function addItemToCart($cartID, $productID, $Qty) {
-        if ($cartID === "NULL") {
+        if ($cartID == "NULL") {
             EXEC_SQL("INSERT INTO cart (closedDateTime) VALUES (NULL)");
             $retData["created"] = GET_SQL("SELECT last_insert_rowid() as cartID");
             $cartID = $retData["created"][0]["cartID"];
@@ -257,6 +257,36 @@ class final_rest
         return json_encode($retData);
     }
 
+    public static function FindClosedCarts($startDate, $endDate) {
+        $query = "SELECT * FROM cart WHERE closedDateTime IS NOT NULL";
+        $params = [];
+
+        if ($startDate !== " ") {
+            $query .= " AND closedDateTime >= ?";
+            array_push($params, $startDate);
+        }
+
+        if ($endDate !== " ") {
+            $query .= " AND closedDateTime <= ?";
+            array_push($params, $endDate);
+        }
+
+        $query .= " ORDER BY closedDateTime DESC";
+
+        try {
+            $retData["result"] = GET_SQL($query, ...$params);
+            $retData["status"] = 0;
+            $retData["message"] = "Success";
+        } catch (Exception $e) {
+            $retData["status"] = 1;
+            $retData["message"] = $e->getMessage();
+        }
+
+        return json_encode($retData);
+    }
+
 }
+
+
 
 
