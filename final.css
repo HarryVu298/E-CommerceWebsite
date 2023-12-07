@@ -1,4 +1,4 @@
-#shoppingcart, #returnToCart {
+#shoppingcart {
     position: absolute;
     right: 0;
 }
@@ -46,19 +46,50 @@ h1, h2, h3 {
 }
 
 .proceed-to-checkout {
-    background-color: yellow;
+    background-color: rgb(231, 231, 37);
     border-color: yellow;
     color: black;
 }
 
 .proceed-to-checkout:hover {
-    background-color: rgb(210, 210, 15);
+    background-color: rgb(206, 206, 26);
     color: black;
 }
 
 .proceed-to-checkout:not(:disabled):active {
     background-color: rgb(210, 210, 15);
 }
+
+.return-to-cart {
+    color: rgb(221, 221, 221);
+}
+
+.return-to-cart:hover {
+    color: white;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+/* .box {
+    border: 2px solid black;
+    border-radius: 10px;
+    padding: 15px;
+    margin: 10px;
+} */
+
+.box {
+    border-bottom: 2px solid black;
+    padding: 15px;
+    margin: 10px;
+}
+
+.required {
+    color: red;
+    font-weight: bold;
+}
+
 
 
 
