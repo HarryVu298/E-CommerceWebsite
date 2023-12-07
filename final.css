@@ -90,6 +90,16 @@ h1, h2, h3 {
     font-weight: bold;
 }
 
+.order-total {
+    font-weight: bold;
+    color: rgb(200, 35, 35);
+}
+
+.place-order-button {
+    width: 100%;
+    background-color: rgb(39, 105, 218);
+}
+
 
 
 

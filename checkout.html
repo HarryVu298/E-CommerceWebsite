@@ -44,12 +44,12 @@
   </nav>
 
   <div class="container">
-    <div class="row">
-      <div class="col-9">
-        <div class="row box">
-          <div class="col-12 mb-3">
-            <h4 class="bold">1. Shipping Address</h4>
-            <form>
+    <form>
+      <div class="row">
+        <div class="col-9">
+          <div class="row box">
+            <div class="col-12 mb-3">
+              <h4 class="bold">1. Shipping Address</h4>
               <!-- Name -->
               <div class="mb-3">
                 <label for="name" class="form-label">Full Name <span class="required">*</span></label>
@@ -394,63 +394,68 @@
                   <option value="Zimbabwe">Zimbabwe</option>
                 </select>
               </div>
-            </form>
-          </div>
-        </div>
-        <div class="row box">
-          <div class="col-12 mb-3">
-            <h4 class="bold">2. Payment Method</h4>
-            <!-- Payment Method Selection -->
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="paymentMethod" id="paymentCash" value="cash" checked
-                onchange="toggleCardForm()">
-              <label class="form-check-label" for="paymentCash">
-                Cash
-              </label>
+
             </div>
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="paymentMethod" id="paymentCard" value="card"
-                onchange="toggleCardForm()">
-              <label class="form-check-label" for="paymentCard">
-                Card
-              </label>
+          </div>
+          <div class="row box">
+            <div class="col-12 mb-3">
+              <h4 class="bold">2. Payment Method</h4>
+              <!-- Payment Method Selection -->
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="paymentMethod" id="paymentCash" value="cash" checked
+                  onchange="toggleCardForm()">
+                <label class="form-check-label" for="paymentCash">
+                  Cash
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="paymentMethod" id="paymentCard" value="card"
+                  onchange="toggleCardForm()">
+                <label class="form-check-label" for="paymentCard">
+                  Card
+                </label>
+              </div>
+
+              <!-- Card Form -->
+              <div id="cardForm" style="display: none;">
+                <div class="mb-3">
+                  <label for="cardNumber" class="form-label">Card Number <span class="required">*</span></label>
+                  <input type="text" class="form-control" id="cardNumber" name="cardNumber" required>
+                </div>
+                <div class="mb-3">
+                  <label for="cardName" class="form-label">Name on Card <span class="required">*</span></label>
+                  <input type="text" class="form-control" id="cardName" name="cardName" required>
+                </div>
+                <div class="mb-3">
+                  <label for="expiryDate" class="form-label">Expiry Date <span class="required">*</span></label>
+                  <input type="text" class="form-control" id="expiryDate" name="expiryDate" placeholder="MM/YY"
+                    required>
+                </div>
+                <div class="mb-3">
+                  <label for="cvv" class="form-label">CVV <span class="required">*</span></label>
+                  <input type="text" class="form-control" id="cvv" name="cvv" required>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <button type="submit" class="btn btn-primary place-order-button">Place your order</button>
+            </div>
+            <div class="col-md-6 order-total">
+              <h4>Order Total: $<span id="total-amount">0.00</span></h4>
             </div>
 
-            <!-- Card Form -->
-            <div id="cardForm" style="display: none;">
-              <div class="mb-3">
-                <label for="cardNumber" class="form-label">Card Number <span class="required">*</span></label>
-                <input type="text" class="form-control" id="cardNumber" name="cardNumber" required>
-              </div>
-              <div class="mb-3">
-                <label for="cardName" class="form-label">Name on Card <span class="required">*</span></label>
-                <input type="text" class="form-control" id="cardName" name="cardName" required>
-              </div>
-              <div class="mb-3">
-                <label for="expiryDate" class="form-label">Expiry Date <span class="required">*</span></label>
-                <input type="text" class="form-control" id="expiryDate" name="expiryDate" placeholder="MM/YY" required>
-              </div>
-              <div class="mb-3">
-                <label for="cvv" class="form-label">CVV <span class="required">*</span></label>
-                <input type="text" class="form-control" id="cvv" name="cvv" required>
-              </div>
-            </div>
+
           </div>
         </div>
-        <div class="row">
-          <div class="col-md-6">
-            <button type="submit" class="btn btn-primary">Place your order</button>
-          </div>
-          
-          
+
+        <!-- Sidebar (col-3) -->
+        <div class="col-3">
+
         </div>
       </div>
-
-      <!-- Sidebar (col-3) -->
-      <div class="col-3">
-
-      </div>
-    </div>
+    </form>
   </div>
 
 
