@@ -258,3 +258,13 @@ function updateStateField() {
     }
 }
 
+function toggleCardForm() {
+    var paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+    var cardForm = document.getElementById('cardForm');
+    if (paymentMethod === 'card') {
+      cardForm.style.display = 'block';
+    } else {
+      cardForm.style.display = 'none';
+    }
+  }
+
