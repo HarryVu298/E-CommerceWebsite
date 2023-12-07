@@ -226,6 +226,21 @@ class final_rest
         return json_encode($retData);
     }
 
+    public static function makeSale($cartID) {
+        try {
+            $CART=GET_SQL("SELECT cart.cartID FROM cart where cart.cartID = ? AND cart.closedDateTime IS NULL", $cartID);
+            if (count($CART) > 0) {
+                EXEC_SQL("UPDATE cart SET closedDateTime=CURRENT_TIMESTAMP WHERE cartID = ?", $cartID);
+                $retData["found"] = 0;
+                $retData["message"] = "Close cart $cartID successfully!";
+            }
+        } catch (Exception $e) {
+            $retData["found"] = 1;
+            $retData["message"]= $e -> getMessage();
+        }
+        return json_encode($retData);
+    }
+
 }
 
 

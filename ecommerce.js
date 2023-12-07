@@ -61,6 +61,7 @@ $(document).ready(function () {
 
     if (currentUrl.includes("cart.html") && cartID !== "NULL") {
         updateCartOverview();
+        console.log(cartID);
     }
 
 });
@@ -74,6 +75,7 @@ function updateCartOverview() {
     }).done(function (response) {
         if (response.found === 0) {
             var tableHtml = "";
+            console.log(response.cart);
             response.cart.forEach(function (item) {
                 var quantityDropdown = '<select class="form-control quantity-select" data-product-id="'
                     + item.product_id + '" onchange="updateCartItemQuantity(\'' + cartID + '\', \''
@@ -145,7 +147,7 @@ function updateCartDisplay() {
             $("#shippingfee").text("$" + shipping.toFixed(2));
             var tax = parseFloat((response.totalAmount * 0.09).toFixed(2));
             $("#tax").text("$" + tax);
-            var totalAfterTax = shipping + parseFloat(response.totalAmount) + tax;
+            var totalAfterTax = (shipping + parseFloat(response.totalAmount) + tax).toFixed(2);
             $("#totalaftertax").text("$" + totalAfterTax);
             $("#totalaftertax2").text(totalAfterTax);
 
@@ -280,6 +282,26 @@ function toggleCardForm() {
     document.getElementById('cardName').required = cardSelected;
     document.getElementById('expiryDate').required = cardSelected;
     document.getElementById('cvv').required = cardSelected;
+}
+
+function makeSale() {
+    $.ajax({
+        url: 'final.php/makeSale',
+        method: 'POST',
+        dataType: 'json',
+        data: { cartID: cartID }
+    }).done(function (response) {
+        if (response.found === 0) {
+            cartID = "NULL";
+            localStorage.setItem('cartID', cartID);
+            updateCartDisplay();
+            alert("Thank you for shopping with Harryzon!");
+        } else {
+            console.log("Error closing the cart:", response.message);
+        }
+    }).fail(function (error) {
+        console.log("AJAX error fetching cart details:", error.statusText);
+    });
 }
 
 
