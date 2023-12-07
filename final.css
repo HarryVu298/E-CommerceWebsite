@@ -1,4 +1,4 @@
-#shoppingcart {
+#shoppingcart, #returnToCart {
     position: absolute;
     right: 0;
 }
@@ -40,5 +40,25 @@ h1, h2, h3 {
 .add-to-cart-button:hover {
     background-color: darkgreen;
 }
+
+.add-to-cart-button:not(:disabled):active {
+    background-color: darkgreen;
+}
+
+.proceed-to-checkout {
+    background-color: yellow;
+    border-color: yellow;
+    color: black;
+}
+
+.proceed-to-checkout:hover {
+    background-color: rgb(210, 210, 15);
+    color: black;
+}
+
+.proceed-to-checkout:not(:disabled):active {
+    background-color: rgb(210, 210, 15);
+}
+
 
 
