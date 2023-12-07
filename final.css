@@ -72,12 +72,12 @@ h1, h2, h3 {
     font-weight: bold;
 }
 
-/* .box {
+.rounded-border {
     border: 2px solid black;
     border-radius: 10px;
     padding: 15px;
     margin: 10px;
-} */
+}
 
 .box {
     border-bottom: 2px solid black;
@@ -99,6 +99,7 @@ h1, h2, h3 {
     width: 100%;
     background-color: rgb(39, 105, 218);
 }
+
 
 
 

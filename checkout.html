@@ -420,20 +420,19 @@
               <div id="cardForm" style="display: none;">
                 <div class="mb-3">
                   <label for="cardNumber" class="form-label">Card Number <span class="required">*</span></label>
-                  <input type="text" class="form-control" id="cardNumber" name="cardNumber" required>
+                  <input type="text" class="form-control" id="cardNumber" name="cardNumber">
                 </div>
                 <div class="mb-3">
                   <label for="cardName" class="form-label">Name on Card <span class="required">*</span></label>
-                  <input type="text" class="form-control" id="cardName" name="cardName" required>
+                  <input type="text" class="form-control" id="cardName" name="cardName">
                 </div>
                 <div class="mb-3">
                   <label for="expiryDate" class="form-label">Expiry Date <span class="required">*</span></label>
-                  <input type="text" class="form-control" id="expiryDate" name="expiryDate" placeholder="MM/YY"
-                    required>
+                  <input type="text" class="form-control" id="expiryDate" name="expiryDate" placeholder="MM/YY">
                 </div>
                 <div class="mb-3">
                   <label for="cvv" class="form-label">CVV <span class="required">*</span></label>
-                  <input type="text" class="form-control" id="cvv" name="cvv" required>
+                  <input type="text" class="form-control" id="cvv" name="cvv">
                 </div>
               </div>
             </div>
@@ -443,7 +442,7 @@
               <button type="submit" class="btn btn-primary place-order-button">Place your order</button>
             </div>
             <div class="col-md-6 order-total">
-              <h4>Order Total: $<span id="total-amount">0.00</span></h4>
+              <h4>Order Total: $<span id="totalaftertax2">0.00</span></h4>
             </div>
 
 
@@ -452,6 +451,44 @@
 
         <!-- Sidebar (col-3) -->
         <div class="col-3">
+          <div class="row rounded-border">
+            <button type="submit" class="btn btn-primary place-order-button">Place your order</button>
+            <div class="row mt-4">
+              <div class="col-9">
+                <p>Items: </p>
+              </div>
+              <div class="col-3">
+                <span id="total-amount-2">$0.00</span>
+              </div>
+            </div>
+            <div class="row mt-1">
+              <div class="col-9">
+                <p>Shipping & handling: </p>
+              </div>
+              <div class="col-3">
+                <span id="shippingfee">$0.00</span> 
+              </div>
+            </div>
+            <div class="row mt-1">
+              <div class="col-9">
+                <p>Taxes (9%): </p>
+              </div>
+              <div class="col-3">
+                <span id="tax">$0.00</span>
+              </div>
+            </div>
+            <div class="row mt-1">
+              <div class="col-9">
+                <p class="bold">ORDER TOTAL: </p>
+              </div>
+              <div class="col-3">
+                <span id="totalaftertax" class="bold">$0.00</span>
+              </div>
+            </div>
+            
+
+            
+          </div>
 
         </div>
       </div>

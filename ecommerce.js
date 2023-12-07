@@ -141,6 +141,14 @@ function updateCartDisplay() {
             $("#total-amount").text(response.totalAmount);
             $("#item-count-2").text(response.itemCount);
             $("#total-amount-2").text("$" + response.totalAmount);
+            var shipping = 2;
+            $("#shippingfee").text("$" + shipping.toFixed(2));
+            var tax = parseFloat((response.totalAmount * 0.09).toFixed(2));
+            $("#tax").text("$" + tax);
+            var totalAfterTax = shipping + parseFloat(response.totalAmount) + tax;
+            $("#totalaftertax").text("$" + totalAfterTax);
+            $("#totalaftertax2").text(totalAfterTax);
+
         } else {
             console.log("Error fetching cart details:", response.message);
         }
@@ -260,11 +268,18 @@ function updateStateField() {
 
 function toggleCardForm() {
     var paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+    var cardSelected = document.getElementById('paymentCard').checked;
     var cardForm = document.getElementById('cardForm');
     if (paymentMethod === 'card') {
       cardForm.style.display = 'block';
     } else {
       cardForm.style.display = 'none';
     }
-  }
+
+    document.getElementById('cardNumber').required = cardSelected;
+    document.getElementById('cardName').required = cardSelected;
+    document.getElementById('expiryDate').required = cardSelected;
+    document.getElementById('cvv').required = cardSelected;
+}
+
 
