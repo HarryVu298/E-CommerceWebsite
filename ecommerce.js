@@ -1,6 +1,8 @@
-var cartID = localStorage.getItem('cartID') || "NULL";;
+var cartID = localStorage.getItem('cartID') || "NULL";
+var cartIDPrintOrder = localStorage.getItem('cartIDPrintOrder') || "NULL";
 // ecommerce.js
 $(document).ready(function () {
+    console.log("CartIDPrintOrder: ", cartIDPrintOrder);
     var currentUrl = window.location.href;
     updateCartDisplay();
     console.log(cartID);
@@ -64,10 +66,90 @@ $(document).ready(function () {
         console.log(cartID);
     }
 
-    if (currentUrl.includes("printableOrder.html") && cartID !== "NULL") {
+    if (currentUrl.includes("printableOrder.html") && cartIDPrintOrder !== "NULL") {
         updatePrintableOrder();
+        updateCostDisplayPrintOrder();
         console.log(cartID);
     }
+
+    $(".place-order-button").click(function() {
+        var isValid = true;
+    
+        var name = $('#name');
+        if (!name.val()) {
+            name.focus();
+            isValid = false;
+            alert('Please enter your full name.');
+            return;
+        }
+    
+        var address1 = $('#address1');
+        if (!address1.val()) {
+            address1.focus();
+            isValid = false;
+            alert('Please enter your address.');
+            return;
+        }
+    
+        var city = $('#city');
+        if (!city.val()) {
+            city.focus();
+            isValid = false;
+            alert('Please enter your city.');
+            return;
+        }
+    
+        var postalCode = $('#postalCode');
+        if (!postalCode.val()) {
+            postalCode.focus();
+            isValid = false;
+            alert('Please enter your postal code.');
+            return;
+        }
+
+        var cardSelected = document.getElementById('paymentCard').checked;
+        if (cardSelected) {
+            var cardNumber = $('#cardNumber');
+            if (!cardNumber.val()) {
+                cardNumber.focus();
+                isValid = false;
+                alert('Please enter your card number.');
+                return;
+            }
+
+            var cardNumber = $('#cardName');
+            if (!cardName.val()) {
+                cardName.focus();
+                isValid = false;
+                alert('Please enter your name on the card.');
+                return;
+            }
+
+            var cardNumber = $('#expiryDate');
+            if (!expiryDate.val()) {
+                expiryDate.focus();
+                isValid = false;
+                alert('Please enter your expiry date.');
+                return;
+            }
+
+            var cardNumber = $('#cvv');
+            if (!cvv.val()) {
+                cvv.focus();
+                isValid = false;
+                alert('Please enter your cvv.');
+                return;
+            }
+
+        }
+        if (isValid) {
+            localStorage.setItem('cartIDPrintOrder', cartID);
+            window.open("printableOrder.html", "_blank");
+            window.open("homepage.html", "_self");
+            makeSale();
+        }
+    });
+    
 
 
 
@@ -138,7 +220,8 @@ function addItemToCart(productID, button) {
     });
 }
 
-function updateCartDisplay() {
+function updateCartDisplay()
+{
     $.ajax({
         url: 'http://172.17.12.44/cse383_final/final.php/getCartDetails',
         method: 'GET',
@@ -159,6 +242,51 @@ function updateCartDisplay() {
             $("#totalaftertax2").text(totalAfterTax);
 
         } else {
+            $("#item-count").text('0');
+            $("#total-amount").text('0.00');
+            $("#item-count-2").text('0');
+            $("#total-amount-2").text("$0.00");
+            $("#shippingfee").text("$0.00");
+            $("#tax").text("$0.00");
+            $("#totalaftertax").text("$0.00");
+            $("#totalaftertax2").text("0.00");
+            console.log("Error fetching cart details:", response.message);
+        }
+    }).fail(function (error) {
+        console.log("AJAX error fetching cart details:", error.statusText);
+    });
+}
+
+function updateCostDisplayPrintOrder()
+{
+    $.ajax({
+        url: 'http://172.17.12.44/cse383_final/final.php/getCartDetails',
+        method: 'GET',
+        dataType: 'json',
+        data: { cartID: cartIDPrintOrder }
+    }).done(function (response) {
+        if (response.status === 0) {
+            $("#item-count").text(response.itemCount);
+            $("#total-amount").text(response.totalAmount);
+            $("#item-count-2").text(response.itemCount);
+            $("#total-amount-2").text("$" + response.totalAmount);
+            var shipping = 2;
+            $("#shippingfee").text("$" + shipping.toFixed(2));
+            var tax = parseFloat((response.totalAmount * 0.09).toFixed(2));
+            $("#tax").text("$" + tax);
+            var totalAfterTax = (shipping + parseFloat(response.totalAmount) + tax).toFixed(2);
+            $("#totalaftertax").text("$" + totalAfterTax);
+            $("#totalaftertax2").text(totalAfterTax);
+
+        } else {
+            $("#item-count").text('0');
+            $("#total-amount").text('0.00');
+            $("#item-count-2").text('0');
+            $("#total-amount-2").text("$0.00");
+            $("#shippingfee").text("$0.00");
+            $("#tax").text("0.00");
+            $("#totalaftertax").text("$0.00");
+            $("#totalaftertax2").text("0.00");
             console.log("Error fetching cart details:", response.message);
         }
     }).fail(function (error) {
@@ -313,15 +441,16 @@ function makeSale() {
 
 
 function updatePrintableOrder() {
+    console.log("orderprint: " + cartIDPrintOrder);
     $.ajax({
-        url: 'http://172.17.12.44/cse383_final/final.php/getCartItems',
+        url: 'http://172.17.12.44/cse383_final/final.php/getCartItemsForPrint',
         method: 'GET',
         dataType: 'json',
-        data: { cartID: cartID }
+        data: { cartID: cartIDPrintOrder }
     }).done(function (response) {
         if (response.found === 0) {
             var tableHtml = "";
-            $("#orderNumber").text(cartID);
+            $("#orderNumber").text(cartIDPrintOrder);
             $("#orderCloseDate").text(response.closedDateTime);
             response.cart.forEach(function (item) {
                 tableHtml += `<tr>

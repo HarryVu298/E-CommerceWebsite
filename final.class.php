@@ -188,6 +188,22 @@ class final_rest
         return json_encode($retData);
     }
 
+    public static function getCartItemsForPrint($cartID) {
+        try {
+            $retData["cart"]=GET_SQL("select * from cart join cartItem using (cartID)
+                                    join product using (Product_id)
+                                    where cart.cartID=? order by
+                                    Category,Subcategory,Title", $cartID);
+            $retData["found"] = 0;
+            $retData["message"]="Returned all items in cart $cartID";
+        } catch (Exception $e) {
+            $retData["found"] = 1;
+            $retData["message"] = $e->getMessage();
+        }
+    
+        return json_encode($retData);
+    }
+
     public static function RemoveitemFromCart($cartID, $productID) {
         $found = GET_SQL("SELECT cart.cartID FROM cart JOIN cartItem USING (cartID) WHERE cart.cartID=? AND product_id = ? AND cart.closedDateTime IS NULL", $cartID, $productID);
         try {

@@ -52,7 +52,7 @@
               <h4 class="bold">1. Shipping Address</h4>
               <!-- Name -->
               <div class="mb-3">
-                <label for="name" class="form-label">Full Name <span class="required">*</span></label>
+                <label for="name" class="form-label">Full Name <span class="required" id="fullname">*</span></label>
                 <input type="text" class="form-control" id="name" name="name" required>
               </div>
 
@@ -439,7 +439,7 @@
           </div>
           <div class="row">
             <div class="col-md-6">
-              <button type="button" class="btn btn-primary place-order-button" onclick="makeSale()">Place your order</button>
+              <button type="button" class="btn btn-primary place-order-button">Place your order</button>
             </div>
             <div class="col-md-6 order-total">
               <h4>Order Total: $<span id="totalaftertax2">0.00</span></h4>
@@ -452,12 +452,12 @@
         <!-- Sidebar (col-3) -->
         <div class="col-3">
           <div class="row rounded-border">
-            <button type="button" class="btn btn-primary place-order-button" onclick="makeSale()">Place your order</button>
+            <button type="button" class="btn btn-primary place-order-button">Place your order</button>
             <div class="row mt-4">
               <div class="col-9">
                 <p>Items: </p>
               </div>
-              <div class="col-3">
+              <div class="col-3 d-flex justify-content-end">
                 <span id="total-amount-2">$0.00</span>
               </div>
             </div>
@@ -465,7 +465,7 @@
               <div class="col-9">
                 <p>Shipping & handling: </p>
               </div>
-              <div class="col-3">
+              <div class="col-3 d-flex justify-content-end">
                 <span id="shippingfee">$0.00</span> 
               </div>
             </div>
@@ -473,7 +473,7 @@
               <div class="col-9">
                 <p>Taxes (9%): </p>
               </div>
-              <div class="col-3">
+              <div class="col-3 d-flex justify-content-end">
                 <span id="tax">$0.00</span>
               </div>
             </div>
@@ -481,7 +481,7 @@
               <div class="col-9">
                 <p class="bold">ORDER TOTAL: </p>
               </div>
-              <div class="col-3">
+              <div class="col-3 d-flex justify-content-end">
                 <span id="totalaftertax" class="bold">$0.00</span>
               </div>
             </div>
