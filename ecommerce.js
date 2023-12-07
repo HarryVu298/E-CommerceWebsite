@@ -107,7 +107,7 @@ $(document).ready(function () {
             return;
         }
 
-        var cardSelected = document.getElementById('paymentCard').checked;
+        var cardSelected = $('#paymentCard').is(':checked');
         if (cardSelected) {
             var cardNumber = $('#cardNumber');
             if (!cardNumber.val()) {
@@ -339,8 +339,8 @@ function updateCartItemQuantity(cartID, productID, newQty) {
 }
 
 function updateStateField() {
-    var country = document.getElementById("country").value;
-    var stateField = document.getElementById("stateField");
+    var country = $("#country").value;
+    var stateField = $("#stateField");
 
     if (country !== "United States") {
         // If the selected country is not the US, switch to a text field
@@ -405,18 +405,18 @@ function updateStateField() {
 
 function toggleCardForm() {
     var paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
-    var cardSelected = document.getElementById('paymentCard').checked;
-    var cardForm = document.getElementById('cardForm');
+    var cardSelected = $('#paymentCard').checked;
+    var cardForm = $('#cardForm');
     if (paymentMethod === 'card') {
       cardForm.style.display = 'block';
     } else {
       cardForm.style.display = 'none';
     }
 
-    document.getElementById('cardNumber').required = cardSelected;
-    document.getElementById('cardName').required = cardSelected;
-    document.getElementById('expiryDate').required = cardSelected;
-    document.getElementById('cvv').required = cardSelected;
+    $('#cardNumber').required = cardSelected;
+    $('#cardName').required = cardSelected;
+    $('#expiryDate').required = cardSelected;
+    $('#cvv').required = cardSelected;
 }
 
 function makeSale() {
@@ -451,7 +451,10 @@ function updatePrintableOrder() {
         if (response.found === 0) {
             var tableHtml = "";
             $("#orderNumber").text(cartIDPrintOrder);
-            $("#orderCloseDate").text(response.closedDateTime);
+            var currentTimestamp = new Date(); 
+            var formattedDate = currentTimestamp.toISOString().split('T')[0];
+
+            $("#orderCloseDate").text(formattedDate);
             response.cart.forEach(function (item) {
                 tableHtml += `<tr>
                     <td>${item.title}</td>
