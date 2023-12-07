@@ -64,6 +64,13 @@ $(document).ready(function () {
         console.log(cartID);
     }
 
+    if (currentUrl.includes("printableOrder.html") && cartID !== "NULL") {
+        updatePrintableOrder();
+        console.log(cartID);
+    }
+
+
+
 });
 
 function updateCartOverview() {
@@ -305,3 +312,30 @@ function makeSale() {
 }
 
 
+function updatePrintableOrder() {
+    $.ajax({
+        url: 'http://172.17.12.44/cse383_final/final.php/getCartItems',
+        method: 'GET',
+        dataType: 'json',
+        data: { cartID: cartID }
+    }).done(function (response) {
+        if (response.found === 0) {
+            var tableHtml = "";
+            $("#orderNumber").text(cartID);
+            $("#orderCloseDate").text(response.closedDateTime);
+            response.cart.forEach(function (item) {
+                tableHtml += `<tr>
+                    <td>${item.title}</td>
+                    <td>${item.description}</td>
+                    <td>${item.Qty}</td>
+                    <td>$${item.price}</td>
+                </tr>`;
+            });
+            $("#product-table tbody").html(tableHtml);
+        } else {
+            alert("Error loading cart items: " + response.message);
+        }
+    }).fail(function (error) {
+        console.log("Error fetching cart items:", error);
+    });
+}
