@@ -75,7 +75,9 @@ function updateCartOverview() {
         if (response.found === 0) {
             var tableHtml = "";
             response.cart.forEach(function(item) {
-                var quantityDropdown = '<select class="form-control quantity-select" data-product-id="' + item.product_id + '">';
+                var quantityDropdown = '<select class="form-control quantity-select" data-product-id="' 
+                                        + item.product_id + '" onchange="updateCartItemQuantity(\'' + cartID + '\', \'' 
+                                        + item.product_id + '\', this.value)">';
                 for (var i = 1; i <= 30; i++) {
                     quantityDropdown += `<option value="${i}" ${i == item.Qty ? 'selected' : ''}>${i}</option>`;
                 }
@@ -158,7 +160,7 @@ function removeItemFromCart(cartID, productID) {
         }
     }).done(function(response) {
         if (response.found === 0) {
-            alert("Item removed from cart successfully!");
+            // alert("Item removed from cart successfully!");
             updateCartDisplay();
             updateCartOverview();
         } else {
@@ -168,3 +170,26 @@ function removeItemFromCart(cartID, productID) {
         console.log("Error removing item from cart:", error.statusText);
     });
 }
+
+function updateCartItemQuantity(cartID, productID, newQty) {
+    $.ajax({
+        url: 'http://172.17.12.44/cse383_final/final.php/updateCartItemQuantity',
+        method: 'POST',
+        dataType: 'json',
+        data: {
+            cartID: cartID,
+            productID: productID,
+            newQty: newQty
+        }
+    }).done(function(response) {
+        if (response.status === 0) {
+            // alert("Quantity updated successfully!");
+            updateCartDisplay();
+        } else {
+            alert("Error: " + response.message);
+        }
+    }).fail(function(error) {
+        console.log("Error updating quantity:", error.statusText);
+    });
+}
+

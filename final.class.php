@@ -208,6 +208,24 @@ class final_rest
         return json_encode($retData);
     }
 
+    public static function updateCartItemQuantity($cartID, $productID, $newQty) {
+        try {
+            $cart = GET_SQL("SELECT cartID FROM cart WHERE cartID = ? AND closedDateTime IS NULL", $cartID);
+            if (count($cart) > 0) {
+                EXEC_SQL("UPDATE cartItem SET Qty = ? WHERE cartID = ? AND product_id = ?", $newQty, $cartID, $productID);
+                $retData["status"] = 0;
+                $retData["message"] = "Update quantity successfully!";
+            } else {
+                $retData["status"] = 1;
+                $retData["message"] = "Cart not found or closed";
+            }
+        } catch (Exception $e) {
+            $retData["status"] = 1;
+            $retData["message"]= $e -> getMessage();
+        }
+        return json_encode($retData);
+    }
+
 }
 
 
