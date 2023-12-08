@@ -672,4 +672,14 @@ function updateOrderTotalInViewOrder(orderID) {
     });
 }
 
+function proceedToCheckout() {
+    var cartItemCount = $("#item-count-2").text();
+    if (parseInt(cartItemCount) > 0) {
+        window.location.href = 'checkout.html';
+    } else {
+        alert("Your cart is empty.");
+    }
+}
+
+
   
