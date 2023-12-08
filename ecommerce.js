@@ -2,6 +2,7 @@
 var cartID = localStorage.getItem('cartID') || "NULL";
 console.log("cartID: ",cartID);
 var cartIDPrintOrder = localStorage.getItem('cartIDPrintOrder') || "NULL";
+var cartIDForViewOrderDetails = "NULL";
 // ecommerce.js
 $(document).ready(function () {
     console.log("CartIDPrintOrder: ", cartIDPrintOrder);
@@ -70,7 +71,6 @@ $(document).ready(function () {
 
     if (currentUrl.includes("printableOrder.html") && cartIDPrintOrder !== "NULL") {
         updatePrintableOrder();
-        updateCostDisplayPrintOrder();
         console.log(cartID);
     }
 
@@ -265,42 +265,7 @@ function updateCartDisplay()
     });
 }
 
-function updateCostDisplayPrintOrder()
-{
-    $.ajax({
-        url: 'http://172.17.12.44/cse383_final/final.php/getCartDetails',
-        method: 'GET',
-        dataType: 'json',
-        data: { cartID: cartIDPrintOrder }
-    }).done(function (response) {
-        if (response.status === 0) {
-            $("#item-count").text(response.itemCount);
-            $("#total-amount").text(response.totalAmount);
-            $("#item-count-2").text(response.itemCount);
-            $("#total-amount-2").text("$" + response.totalAmount);
-            var shipping = 2;
-            $("#shippingfee").text("$" + shipping.toFixed(2));
-            var tax = parseFloat((response.totalAmount * 0.09).toFixed(2));
-            $("#tax").text("$" + tax);
-            var totalAfterTax = (shipping + parseFloat(response.totalAmount) + tax).toFixed(2);
-            $("#totalaftertax").text("$" + totalAfterTax);
-            $("#totalaftertax2").text(totalAfterTax);
 
-        } else {
-            $("#item-count").text('0');
-            $("#total-amount").text('0.00');
-            $("#item-count-2").text('0');
-            $("#total-amount-2").text("$0.00");
-            $("#shippingfee").text("$0.00");
-            $("#tax").text("0.00");
-            $("#totalaftertax").text("$0.00");
-            $("#totalaftertax2").text("0.00");
-            console.log("Error fetching cart details:", response.message);
-        }
-    }).fail(function (error) {
-        console.log("AJAX error fetching cart details:", error.statusText);
-    });
-}
 
 function removeItemFromCart(cartID, productID) {
     $.ajax({
@@ -450,22 +415,94 @@ function makeSale() {
 }
 
 
+// function updatePrintableOrder() {
+//     console.log("orderprint: " + cartIDPrintOrder);
+//     $.ajax({
+//         url: 'http://172.17.12.44/cse383_final/final.php/getCartItemsForPrint',
+//         method: 'GET',
+//         dataType: 'json',
+//         data: { cartID: cartIDPrintOrder }
+//     }).done(function (response) {
+//         if (response.found === 0) {
+//             var tableHtml = "";
+//             $("#orderNumber").text(cartIDPrintOrder);
+//             var currentTimestamp = new Date(); 
+//             var formattedDate = currentTimestamp.toISOString().split('T')[0];
+
+//             $("#orderCloseDate").text(formattedDate);
+//             response.cart.forEach(function (item) {
+//                 tableHtml += `<tr>
+//                     <td>${item.title}</td>
+//                     <td>${item.description}</td>
+//                     <td>${item.Qty}</td>
+//                     <td>$${item.price}</td>
+//                 </tr>`;
+//             });
+//             $("#product-table tbody").html(tableHtml);
+//         } else {
+//             alert("Error loading cart items: " + response.message);
+//         }
+//     }).fail(function (error) {
+//         console.log("Error fetching cart items:", error);
+//     });
+// }
+
+// function updateCostDisplayPrintOrder()
+// {
+//     $.ajax({
+//         url: 'http://172.17.12.44/cse383_final/final.php/getCartDetails',
+//         method: 'GET',
+//         dataType: 'json',
+//         data: { cartID: cartIDPrintOrder }
+//     }).done(function (response) {
+//         if (response.status === 0) {
+//             $("#item-count").text(response.itemCount);
+//             $("#total-amount").text(response.totalAmount);
+//             $("#item-count-2").text(response.itemCount);
+//             $("#total-amount-2").text("$" + response.totalAmount);
+//             var shipping = 2;
+//             $("#shippingfee").text("$" + shipping.toFixed(2));
+//             var tax = parseFloat((response.totalAmount * 0.09).toFixed(2));
+//             $("#tax").text("$" + tax);
+//             var totalAfterTax = (shipping + parseFloat(response.totalAmount) + tax).toFixed(2);
+//             $("#totalaftertax").text("$" + totalAfterTax);
+//             $("#totalaftertax2").text(totalAfterTax);
+
+//         } else {
+//             $("#item-count").text('0');
+//             $("#total-amount").text('0.00');
+//             $("#item-count-2").text('0');
+//             $("#total-amount-2").text("$0.00");
+//             $("#shippingfee").text("$0.00");
+//             $("#tax").text("0.00");
+//             $("#totalaftertax").text("$0.00");
+//             $("#totalaftertax2").text("0.00");
+//             console.log("Error fetching cart details:", response.message);
+//         }
+//     }).fail(function (error) {
+//         console.log("AJAX error fetching cart details:", error.statusText);
+//     });
+// }
+
+
 function updatePrintableOrder() {
     console.log("orderprint: " + cartIDPrintOrder);
+
     $.ajax({
-        url: 'http://172.17.12.44/cse383_final/final.php/getCartItemsForPrint',
+        url: 'http://172.17.12.44/cse383_final/final.php/getCartCompleteDetailsForPrint',
         method: 'GET',
         dataType: 'json',
         data: { cartID: cartIDPrintOrder }
     }).done(function (response) {
-        if (response.found === 0) {
+        if (response.status === 0) {
+            // Update order details
             var tableHtml = "";
             $("#orderNumber").text(cartIDPrintOrder);
             var currentTimestamp = new Date(); 
             var formattedDate = currentTimestamp.toISOString().split('T')[0];
-
             $("#orderCloseDate").text(formattedDate);
-            response.cart.forEach(function (item) {
+
+            response.cartItems.forEach(function (item) {
                 tableHtml += `<tr>
                     <td>${item.title}</td>
                     <td>${item.description}</td>
@@ -474,13 +511,28 @@ function updatePrintableOrder() {
                 </tr>`;
             });
             $("#product-table tbody").html(tableHtml);
+
+            // Update cost display
+            $("#item-count").text(response.itemCount);
+            $("#total-amount").text(response.totalAmount);
+            var shipping = 2;
+            var tax = parseFloat((response.totalAmount * 0.09).toFixed(2));
+            var totalAfterTax = (shipping + parseFloat(response.totalAmount) + tax).toFixed(2);
+
+            $("#item-count-2").text(response.itemCount);
+            $("#total-amount-2").text("$" + response.totalAmount);
+            $("#shippingfee").text("$" + shipping.toFixed(2));
+            $("#tax").text("$" + tax);
+            $("#totalaftertax").text("$" + totalAfterTax);
+            $("#totalaftertax2").text(totalAfterTax);
         } else {
-            alert("Error loading cart items: " + response.message);
+            alert("Error loading order details: " + response.message);
         }
     }).fail(function (error) {
-        console.log("Error fetching cart items:", error);
+        console.log("Error fetching order details:", error);
     });
 }
+
 
 function filterOrders() {
     var startDate = $('#startDate').val() || " ";
@@ -495,6 +547,7 @@ function filterOrders() {
         endDate: endDate
       }
     }).done(function(response) {
+        console.log(response);
       updateOrdersTable(response.result);
     }).fail(function(error) {
       console.log("Error loading filtered orders:", error);
@@ -508,7 +561,7 @@ function updateOrdersTable(result) {
         tableHtml += `<tr>
                     <td>${order.cartID}</td>
                     <td>${order.closedDateTime}</td>
-                    <td><button onclick="viewOrderDetails(${order.cartID})">Details</button></td>
+                    <td><button type="button" class="btn btn-primary" data-bs-toggle="modal" onclick="viewOrderDetails(${order.cartID})" data-bs-target="#orderDetailsModal">Details</button></td>
                     <td><button onclick="printOrder(${order.cartID})">Print</button></td>
                 </tr>`;
     })
@@ -520,4 +573,67 @@ function printOrder(cartID) {
     localStorage.setItem('cartIDPrintOrder', cartID); 
     window.open("printableOrder.html", "_blank");
 }
+
+
+
+function viewOrderDetails(orderID) {
+    cartIDForViewOrderDetails = orderID;
+    console.log("cartIDForViewOrderDetails: " + cartIDForViewOrderDetails);
+  // Clear previous data
+  $('#orderDetailsTable tbody').empty();
+  // Fetch and populate data
+  $.ajax({
+    url: 'http://172.17.12.44/cse383_final/final.php/getCartItemsForPrint', 
+    method: 'GET',
+    dataType: 'json',
+    data: { cartID: cartIDForViewOrderDetails }
+  }).done(function(response) {
+    console.log("response: ", response);
+    updateOrderTotalInViewOrder(cartIDForViewOrderDetails);
+    if (response.found === 0) {
+      response.cart.forEach(function(item) {
+        var rowHtml = `<tr>
+                          <td><img src="${item.image}" alt="${item.title}" style="width: 100px; height: auto;"></td>
+                          <td>${item.title}</td>
+                          <td>${item.description}</td>
+                          <td>${item.subcategory}</td>
+                          <td>${item.Qty}</td>
+                          <td>$${item.price}</td>
+                        </tr>`;
+        $('#orderDetailsTable tbody').append(rowHtml);
+      });
+      $('#orderDetailsModal').modal('show');
+    } else {
+      alert("Error loading order details: " + response.message);
+    }
+  }).fail(function(error) {
+    console.log("Error fetching order details:", error);
+  });
+}
+
+function updateOrderTotalInViewOrder(orderID) {
+    cartIDForViewOrderDetails = orderID;
+    $.ajax({
+        url: 'http://172.17.12.44/cse383_final/final.php/getCartDetails',
+        method: 'GET',
+        dataType: 'json',
+        data: { cartID: cartIDForViewOrderDetails }
+    }).done(function (response) {
+        if (response.status === 0) {
+            $("#item-count-view-order").text(response.itemCount);          
+            var shipping = 2;
+            var tax = parseFloat((response.totalAmount * 0.09).toFixed(2));
+            var totalAfterTax = (shipping + parseFloat(response.totalAmount) + tax).toFixed(2);
+            $("#total-after-tax-view-order").text("$" + totalAfterTax);
+
+        } else {
+            $("#item-count-view-order").text("0");
+            $("#total-after-tax-view-order").text("$0.00");
+            console.log("Error fetching cart details:", response.message);
+        }
+    }).fail(function (error) {
+        console.log("AJAX error fetching cart details:", error.statusText);
+    });
+}
+
   

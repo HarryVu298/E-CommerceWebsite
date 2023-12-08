@@ -1,90 +1,126 @@
 <!doctype html>
 <html lang="en">
 
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Harryzon</title>
-    <link rel="icon" type="image/png" href="harryzon.png">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Harryzon</title>
+  <link rel="icon" type="image/png" href="harryzon.png">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
-    <script src="https://code.jquery.com/jquery-3.6.3.min.js"
-      integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
-    <script src="ecommerce.js?rev=1"></script>
-    <link rel="stylesheet" type="text/css" href="final.css?rev=1">
-  </head>
 
-  <body>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
-      <div class="container-fluid">
-        <a href="http://172.17.12.44/cse383_final/homepage.html">
-          <img src="harryzon02.png" alt="Harryzon logo" height='60px' width='auto'>
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav">
-            <li class="nav-item">
-              <a class="nav-link" href="http://172.17.12.44/cse383_final/homepage.html">Homepage</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="http://172.17.12.44/cse383_final/ecommerce.html">Ecommerce</a>
-            </li>
-            <li class="nav-item active">
-              <a class="nav-link" href="http://172.17.12.44/cse383_final/myOrder.html">My Orders</a>
-            </li>
-            <!-- Shopping Cart-->
-            <li class="nav-item" id="shoppingcart">
-              <a class="nav-link" href="http://172.17.12.44/cse383_final/cart.html">
-                <i class="fa fa-shopping-cart"></i> Cart (<span id="item-count">0</span> items, $<span
-                  id="total-amount">0.00</span>)
-              </a>
-            </li>
-          </ul>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+  <script src="https://code.jquery.com/jquery-3.6.3.min.js"
+    integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+  <script src="ecommerce.js?rev=1"></script>
+  <link rel="stylesheet" type="text/css" href="final.css?rev=1">
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
+    <div class="container-fluid">
+      <a href="http://172.17.12.44/cse383_final/homepage.html">
+        <img src="harryzon02.png" alt="Harryzon logo" height='60px' width='auto'>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="http://172.17.12.44/cse383_final/homepage.html">Homepage</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="http://172.17.12.44/cse383_final/ecommerce.html">Ecommerce</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="http://172.17.12.44/cse383_final/myOrder.html">My Orders</a>
+          </li>
+          <!-- Shopping Cart-->
+          <li class="nav-item" id="shoppingcart">
+            <a class="nav-link" href="http://172.17.12.44/cse383_final/cart.html">
+              <i class="fa fa-shopping-cart"></i> Cart (<span id="item-count">0</span> items, $<span
+                id="total-amount">0.00</span>)
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-4">
+    <h2>Closed Orders</h2>
+    <div class="mb-4">
+      <label for="startDate">Start Date:</label>
+      <input type="date" id="startDate" class="form-control">
+
+      <label for="endDate" class="mt-2">End Date:</label>
+      <input type="date" id="endDate" class="form-control">
+
+      <button onclick="filterOrders()" class="btn btn-primary mt-2">Filter</button>
+    </div>
+
+
+    <!-- Closed Orders Table -->
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Order Number</th>
+          <th>Closed Date</th>
+          <th>Details</th>
+          <th>Print</th>
+        </tr>
+      </thead>
+      <tbody id="closedOrdersTable">
+
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Order Details Modal -->
+  <div class="modal fade" id="orderDetailsModal" tabindex="-1" aria-labelledby="orderDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="orderDetailsModalLabel">Order Details</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <table class="table" id="orderDetailsTable">
+            <thead>
+              <tr>
+                <th>Image</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Subcategory</th>
+                <th>Quantity</th>
+                <th>Price</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Order items will be added here -->
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="4" class="text-right"><strong>ORDER TOTAL (Including Shipping and Taxes):</strong></td>
+                <td id="item-count-view-order" class="text-right">0</td>
+                <td id="total-after-tax-view-order">0.00</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick="printOrder(cartIDForViewOrderDetails)">Print Order</button>
         </div>
       </div>
-    </nav>
-
-    <div class="container mt-4">
-      <h2>Closed Orders</h2>
-      <div class="mb-4">
-        <label for="startDate">Start Date:</label>
-        <input type="date" id="startDate" class="form-control">
-      
-        <label for="endDate" class="mt-2">End Date:</label>
-        <input type="date" id="endDate" class="form-control">
-      
-        <button onclick="filterOrders()" class="btn btn-primary mt-2">Filter</button>
-      </div>
-      
-    
-      <!-- Closed Orders Table -->
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Order Number</th>
-            <th>Closed Date</th>
-            <th>Details</th>
-            <th>Print</th>
-          </tr>
-        </thead>
-        <tbody id="closedOrdersTable">
-          
-        </tbody>
-      </table>
     </div>
-        
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
-      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-      crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-      crossorigin="anonymous"></script>
-  </body>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</body>
 
 </html>

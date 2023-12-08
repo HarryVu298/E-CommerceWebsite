@@ -204,6 +204,29 @@ class final_rest
         return json_encode($retData);
     }
 
+    public static function getCartCompleteDetailsForPrint($cartID) {
+        try {
+            $cartItems = GET_SQL("select * from cart join cartItem using (cartID)
+                                join product using (Product_id)
+                                where cart.cartID=? order by
+                                Category, Subcategory, Title", $cartID);
+    
+            $cartDetails = GET_SQL("SELECT SUM(Qty) as itemCount, SUM(Qty * price) as totalAmount FROM cartItem JOIN product ON cartItem.product_id = product.product_id WHERE cartID = ?", $cartID);
+    
+            $retData["cartItems"] = $cartItems;
+            $retData["itemCount"] = $cartDetails[0]["itemCount"];
+            $retData["totalAmount"] = $cartDetails[0]["totalAmount"];
+            $retData["status"] = 0;
+            $retData["message"] = "Details fetched successfully";
+        } catch (Exception $e) {
+            $retData["status"] = 1;
+            $retData["message"] = $e->getMessage();
+        }
+    
+        return json_encode($retData);
+    }
+    
+
     public static function RemoveitemFromCart($cartID, $productID) {
         $found = GET_SQL("SELECT cart.cartID FROM cart JOIN cartItem USING (cartID) WHERE cart.cartID=? AND product_id = ? AND cart.closedDateTime IS NULL", $cartID, $productID);
         try {
