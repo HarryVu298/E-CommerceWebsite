@@ -1,6 +1,6 @@
 //localStorage.removeItem('cartID');
 var cartID = localStorage.getItem('cartID') || "NULL";
-console.log("cartID: ",cartID);
+console.log("cartID: ", cartID);
 var cartIDPrintOrder = localStorage.getItem('cartIDPrintOrder') || "NULL";
 var cartIDForViewOrderDetails = "NULL";
 // ecommerce.js
@@ -78,10 +78,10 @@ $(document).ready(function () {
         filterOrders();
     }
 
-    
-    $(".place-order-button").click(function() {
+
+    $(".place-order-button").click(function () {
         var isValid = true;
-    
+
         var name = $('#name');
         if (!name.val()) {
             name.focus();
@@ -89,7 +89,7 @@ $(document).ready(function () {
             alert('Please enter your full name.');
             return;
         }
-    
+
         var address1 = $('#address1');
         if (!address1.val()) {
             address1.focus();
@@ -97,7 +97,7 @@ $(document).ready(function () {
             alert('Please enter your address.');
             return;
         }
-    
+
         var city = $('#city');
         if (!city.val()) {
             city.focus();
@@ -116,8 +116,8 @@ $(document).ready(function () {
                 return;
             }
         }
-        
-    
+
+
         var postalCode = $('#postalCode');
         if (!postalCode.val()) {
             postalCode.focus();
@@ -171,20 +171,20 @@ $(document).ready(function () {
     });
 
     // Format for cart number using event listener
-    $('#cardNumber').on('input', function() {
+    $('#cardNumber').on('input', function () {
         $(this).val($(this).val().replace(/[^\d]/g, '').substring(0, 19));
     });
-    
+
     // format for expiry date to MM/YY
-    $('#expiryDate').on('input', function() {
+    $('#expiryDate').on('input', function () {
         $(this).val($(this).val().replace(/[^\d\/]/g, '').replace(/(\d{2})(\d{2})/, '$1/$2').substring(0, 5));
     });
-    
+
     // format for CVV 
-    $('#cvv').on('input', function() {
+    $('#cvv').on('input', function () {
         $(this).val($(this).val().replace(/[^\d]/g, '').substring(0, 3));
     });
-    
+
 
 
 
@@ -255,8 +255,7 @@ function addItemToCart(productID, button) {
     });
 }
 
-function updateCartDisplay()
-{
+function updateCartDisplay() {
     $.ajax({
         url: 'http://172.17.12.44/cse383_final/final.php/getCartDetails',
         method: 'GET',
@@ -411,7 +410,7 @@ function toggleCardForm() {
     if (cardSelected) {
         cardForm.show();
     } else {
-        cardForm.hide(); 
+        cardForm.hide();
     }
 
     $('#cardNumber').prop('required', cardSelected);
@@ -573,27 +572,27 @@ function updatePrintableOrder() {
 function filterOrders() {
     var startDate = $('#startDate').val() || " ";
     var endDate = $('#endDate').val() || " ";
-  
+
     $.ajax({
-      url: 'http://172.17.12.44/cse383_final/final.php/FindClosedCarts',
-      method: 'GET',
-      dataType: 'json',
-      data: { 
-        startDate: startDate,
-        endDate: endDate
-      }
-    }).done(function(response) {
+        url: 'http://172.17.12.44/cse383_final/final.php/FindClosedCarts',
+        method: 'GET',
+        dataType: 'json',
+        data: {
+            startDate: startDate,
+            endDate: endDate
+        }
+    }).done(function (response) {
         console.log(response);
-      updateOrdersTable(response.result);
-    }).fail(function(error) {
-      console.log("Error loading filtered orders:", error);
+        updateOrdersTable(response.result);
+    }).fail(function (error) {
+        console.log("Error loading filtered orders:", error);
     });
 }
 
 function updateOrdersTable(result) {
-    
+
     var tableHtml = "";
-    result.forEach(function(order) {
+    result.forEach(function (order) {
         tableHtml += `<tr>
                     <td>${order.cartID}</td>
                     <td>${order.closedDateTime}</td>
@@ -606,7 +605,7 @@ function updateOrdersTable(result) {
 }
 
 function printOrder(cartID) {
-    localStorage.setItem('cartIDPrintOrder', cartID); 
+    localStorage.setItem('cartIDPrintOrder', cartID);
     window.open("printableOrder.html", "_blank");
 }
 
@@ -615,20 +614,20 @@ function printOrder(cartID) {
 function viewOrderDetails(orderID) {
     cartIDForViewOrderDetails = orderID;
     console.log("cartIDForViewOrderDetails: " + cartIDForViewOrderDetails);
-  // Clear previous data
-  $('#orderDetailsTable tbody').empty();
-  // Fetch and populate data
-  $.ajax({
-    url: 'http://172.17.12.44/cse383_final/final.php/getCartItemsForPrint', 
-    method: 'GET',
-    dataType: 'json',
-    data: { cartID: cartIDForViewOrderDetails }
-  }).done(function(response) {
-    console.log("response: ", response);
-    updateOrderTotalInViewOrder(cartIDForViewOrderDetails);
-    if (response.found === 0) {
-      response.cart.forEach(function(item) {
-        var rowHtml = `<tr>
+    // Clear previous data
+    $('#orderDetailsTable tbody').empty();
+    // Fetch and populate data
+    $.ajax({
+        url: 'http://172.17.12.44/cse383_final/final.php/getCartItemsForPrint',
+        method: 'GET',
+        dataType: 'json',
+        data: { cartID: cartIDForViewOrderDetails }
+    }).done(function (response) {
+        console.log("response: ", response);
+        updateOrderTotalInViewOrder(cartIDForViewOrderDetails);
+        if (response.found === 0) {
+            response.cart.forEach(function (item) {
+                var rowHtml = `<tr>
                           <td><img src="${item.image}" alt="${item.title}" style="width: 100px; height: auto;"></td>
                           <td>${item.title}</td>
                           <td>${item.description}</td>
@@ -636,15 +635,15 @@ function viewOrderDetails(orderID) {
                           <td>${item.Qty}</td>
                           <td>$${item.price}</td>
                         </tr>`;
-        $('#orderDetailsTable tbody').append(rowHtml);
-      });
-      $('#orderDetailsModal').modal('show');
-    } else {
-      alert("Error loading order details: " + response.message);
-    }
-  }).fail(function(error) {
-    console.log("Error fetching order details:", error);
-  });
+                $('#orderDetailsTable tbody').append(rowHtml);
+            });
+            $('#orderDetailsModal').modal('show');
+        } else {
+            alert("Error loading order details: " + response.message);
+        }
+    }).fail(function (error) {
+        console.log("Error fetching order details:", error);
+    });
 }
 
 function updateOrderTotalInViewOrder(orderID) {
@@ -656,7 +655,7 @@ function updateOrderTotalInViewOrder(orderID) {
         data: { cartID: cartIDForViewOrderDetails }
     }).done(function (response) {
         if (response.status === 0) {
-            $("#item-count-view-order").text(response.itemCount);          
+            $("#item-count-view-order").text(response.itemCount);
             var shipping = 2;
             var tax = parseFloat((response.totalAmount * 0.09).toFixed(2));
             var totalAfterTax = (shipping + parseFloat(response.totalAmount) + tax).toFixed(2);
@@ -682,4 +681,4 @@ function proceedToCheckout() {
 }
 
 
-  
+

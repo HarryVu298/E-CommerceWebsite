@@ -1,89 +1,89 @@
 <!doctype html>
 <html lang="en">
 
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Print order</title>
-        <link rel="icon" type="image/png" href="harryzon.png">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-            integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Print order</title>
+    <link rel="icon" type="image/png" href="harryzon.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 
 
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
-        <script src="https://code.jquery.com/jquery-3.6.3.min.js"
-            integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
-        <script src="ecommerce.js?rev=1"></script>
-        <link rel="stylesheet" type="text/css" href="final.css?rev=1">
-    </head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"
+        integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+    <script src="ecommerce.js?rev=1"></script>
+    <link rel="stylesheet" type="text/css" href="final.css?rev=1">
+</head>
 
-    <body>
+<body>
 
-        <div class="container mt-4">
-            <div class="row">
-                <div class="col-12">
-                    <h1 class="text-center">Order Summary</h1>
-                    <hr>
-                    <div class="row mb-4">
-                        <div class="col-md-6">
-                            <h4>Order Number: #<span id="orderNumber">0</span></h4>
-                        </div>
-                        <div class="col-md-6 text-md-right">
-                            <h4>Closed Date: <span id="orderCloseDate">0000-00-00</span></h4>
-                        </div>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="text-center">Order Summary</h1>
+                <hr>
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h4>Order Number: #<span id="orderNumber">0</span></h4>
                     </div>
+                    <div class="col-md-6 text-md-right">
+                        <h4>Closed Date: <span id="orderCloseDate">0000-00-00</span></h4>
+                    </div>
+                </div>
 
-                    <!-- Order Details Table -->
-                    <table class="table table-bordered" id="product-table">
-                        <thead>
+                <!-- Order Details Table -->
+                <table class="table table-bordered" id="product-table">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Description</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+
+                <div class="row">
+                    <div class="col-md-4 offset-md-8">
+                        <table class="table">
                             <tr>
-                                <th>Product</th>
-                                <th>Description</th>
-                                <th>Quantity</th>
-                                <th>Price</th>
+                                <th>Item Total:</th>
+                                <td id="total-amount-2">$0.00</td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            
-                        </tbody>
-                    </table>
-
-                    <div class="row">
-                        <div class="col-md-4 offset-md-8">
-                            <table class="table">
-                                <tr>
-                                    <th>Item Total:</th>
-                                    <td id="total-amount-2">$0.00</td>
-                                </tr>
-                                <tr>
-                                    <th>Shipping Fee:</th>
-                                    <td id="shippingfee">$0.00</td>
-                                </tr>
-                                <tr>
-                                    <th>Tax:</th>
-                                    <td id="tax">$0.60</td>
-                                </tr>
-                                <tr>
-                                    <th>Total:</th>
-                                    <td><strong id="totalaftertax">$0.00</strong></td>
-                                </tr>
-                            </table>
-                        </div>
+                            <tr>
+                                <th>Shipping Fee:</th>
+                                <td id="shippingfee">$0.00</td>
+                            </tr>
+                            <tr>
+                                <th>Tax:</th>
+                                <td id="tax">$0.60</td>
+                            </tr>
+                            <tr>
+                                <th>Total:</th>
+                                <td><strong id="totalaftertax">$0.00</strong></td>
+                            </tr>
+                        </table>
                     </div>
+                </div>
 
-                    <!-- Print Button -->
-                    <div class="text-center no-print">
-                        <button class="btn btn-primary" onclick="window.print()">Print Order Summary</button>
-                    </div>
+                <!-- Print Button -->
+                <div class="text-center no-print">
+                    <button class="btn btn-primary" onclick="window.print()">Print Order Summary</button>
                 </div>
             </div>
         </div>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
-            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-            crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-            crossorigin="anonymous"></script>
-    </body>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+</body>
 
 </html>
