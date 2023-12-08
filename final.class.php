@@ -313,7 +313,3 @@ class final_rest
     }
 
 }
-
-
-
-
