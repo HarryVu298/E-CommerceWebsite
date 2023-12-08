@@ -290,8 +290,12 @@ class final_rest
         }
 
         if ($endDate !== " ") {
-            $query .= " AND closedDateTime <= ?";
-            array_push($params, $endDate);
+            $endDateTime = new DateTime($endDate);
+            $endDateTime->modify('+1 day');
+            $endDatePlusOne = $endDateTime->format('Y-m-d');
+
+            $query .= " AND closedDateTime < ?";
+            array_push($params, $endDatePlusOne);
         }
 
         $query .= " ORDER BY closedDateTime DESC";
