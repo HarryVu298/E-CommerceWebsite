@@ -105,6 +105,18 @@ $(document).ready(function () {
             alert('Please enter your city.');
             return;
         }
+
+        var stateText = $('#stateText');
+        var country = $('#country');
+        if (country.val() !== "United States") {
+            if (!stateText.val()) {
+                stateText.focus();
+                isValid = false;
+                alert('Please enter your state/province.');
+                return;
+            }
+        }
+        
     
         var postalCode = $('#postalCode');
         if (!postalCode.val()) {
@@ -312,15 +324,16 @@ function updateCartItemQuantity(cartID, productID, newQty) {
 }
 
 function updateStateField() {
-    var country = $("#country").value;
+    var country = $("#country").val();
+    console.log(country);
     var stateField = $("#stateField");
 
     if (country !== "United States") {
         // If the selected country is not the US, switch to a text field
-        stateField.innerHTML = '<label for="state" class="form-label">State/Province: <span class="required">*</span></label><input type="text" id="state" name="state" class="form-control" required>';
+        stateField.html('<label for="state" class="form-label">State/Province: <span class="required">*</span></label><input type="text" id="stateText" name="state" class="form-control" required>');
     } else {
         // If the US is selected, use a dropdown for states
-        stateField.innerHTML = '<label for="state" class="form-label">State <span class="required">*</span></label>' + '<select id="state" name="state" class="form-control">'
+        stateField.html('<label for="state" class="form-label">State <span class="required">*</span></label>' + '<select id="state" name="state" class="form-control">'
             + '<option value="AL">Alabama</option>'
             + '<option value="AK">Alaska</option>'
             + '<option value="AZ">Arizona</option>'
@@ -372,7 +385,7 @@ function updateStateField() {
             + '<option value="WV">West Virginia</option>'
             + '<option value="WI">Wisconsin</option>'
             + '<option value="WY">Wyoming</option>'
-            + '</select>';
+            + '</select>');
     }
 }
 
@@ -495,11 +508,17 @@ function updatePrintableOrder() {
         data: { cartID: cartIDPrintOrder }
     }).done(function (response) {
         if (response.status === 0) {
+            console.log("Here is the response: ", response);
             // Update order details
             var tableHtml = "";
             $("#orderNumber").text(cartIDPrintOrder);
-            var currentTimestamp = new Date(); 
-            var formattedDate = currentTimestamp.toISOString().split('T')[0];
+            var formattedDate;
+            if (!response.cartItems[0].closedDateTime) {
+                var currentTimestamp = new Date();
+                formattedDate = currentTimestamp.toISOString().split('T')[0];
+            } else {
+                formattedDate = response.cartItems[0].closedDateTime;
+            }
             $("#orderCloseDate").text(formattedDate);
 
             response.cartItems.forEach(function (item) {
@@ -534,6 +553,8 @@ function updatePrintableOrder() {
 }
 
 
+
+
 function filterOrders() {
     var startDate = $('#startDate').val() || " ";
     var endDate = $('#endDate').val() || " ";
@@ -562,7 +583,7 @@ function updateOrdersTable(result) {
                     <td>${order.cartID}</td>
                     <td>${order.closedDateTime}</td>
                     <td><button type="button" class="btn btn-primary" data-bs-toggle="modal" onclick="viewOrderDetails(${order.cartID})" data-bs-target="#orderDetailsModal">Details</button></td>
-                    <td><button onclick="printOrder(${order.cartID})">Print</button></td>
+                    <td><button type="button" class="btn btn-primary" onclick="printOrder(${order.cartID})">Print</button></td>
                 </tr>`;
     })
 
