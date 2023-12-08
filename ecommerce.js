@@ -74,6 +74,11 @@ $(document).ready(function () {
         console.log(cartID);
     }
 
+    if (currentUrl.includes("myOrder.html")) {
+        filterOrders();
+    }
+
+    
     $(".place-order-button").click(function() {
         var isValid = true;
     
@@ -149,7 +154,7 @@ $(document).ready(function () {
             window.open("printableOrder.html", "_blank");
             makeSale();
             localStorage.removeItem('cartID');
-            window.open("homepage.html", "_self");
+            window.open("comfirmation.html", "_self");
         }
     });
     
