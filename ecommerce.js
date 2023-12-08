@@ -169,6 +169,21 @@ $(document).ready(function () {
             window.open("comfirmation.html", "_self");
         }
     });
+
+    // Format for cart number using event listener
+    $('#cardNumber').on('input', function() {
+        $(this).val($(this).val().replace(/[^\d]/g, '').substring(0, 19));
+    });
+    
+    // format for expiry date to MM/YY
+    $('#expiryDate').on('input', function() {
+        $(this).val($(this).val().replace(/[^\d\/]/g, '').replace(/(\d{2})(\d{2})/, '$1/$2').substring(0, 5));
+    });
+    
+    // format for CVV 
+    $('#cvv').on('input', function() {
+        $(this).val($(this).val().replace(/[^\d]/g, '').substring(0, 3));
+    });
     
 
 
