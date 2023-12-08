@@ -136,7 +136,7 @@ $(document).ready(function () {
                 return;
             }
 
-            var cardNumber = $('#cardName');
+            var cardName = $('#cardName');
             if (!cardName.val()) {
                 cardName.focus();
                 isValid = false;
@@ -144,7 +144,7 @@ $(document).ready(function () {
                 return;
             }
 
-            var cardNumber = $('#expiryDate');
+            var expiryDate = $('#expiryDate');
             if (!expiryDate.val()) {
                 expiryDate.focus();
                 isValid = false;
@@ -152,7 +152,7 @@ $(document).ready(function () {
                 return;
             }
 
-            var cardNumber = $('#cvv');
+            var cvv = $('#cvv');
             if (!cvv.val()) {
                 cvv.focus();
                 isValid = false;
