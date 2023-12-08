@@ -172,7 +172,7 @@ $(document).ready(function () {
 
     // Format for cart number using event listener
     $('#cardNumber').on('input', function () {
-        $(this).val($(this).val().replace(/[^\d]/g, '').substring(0, 19));
+        $(this).val($(this).val().replace(/[^\d]/g, '').substring(0, 16));
     });
 
     // format for expiry date to MM/YY
@@ -182,7 +182,7 @@ $(document).ready(function () {
 
     // format for CVV 
     $('#cvv').on('input', function () {
-        $(this).val($(this).val().replace(/[^\d]/g, '').substring(0, 3));
+        $(this).val($(this).val().replace(/[^\d]/g, '').substring(0, 4));
     });
 
 
