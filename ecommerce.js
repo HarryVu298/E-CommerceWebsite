@@ -17,7 +17,7 @@ $(document).ready(function () {
         var sort = $('#sort-input').val() || 'NULL';
 
         $.ajax({
-            url: 'http://172.17.12.44/cse383_final/final.php/getProduct',
+            url: 'final.php/getProduct',
             method: 'GET',
             dataType: 'json',
             data: {
@@ -192,7 +192,7 @@ $(document).ready(function () {
 
 function updateCartOverview() {
     $.ajax({
-        url: 'http://172.17.12.44/cse383_final/final.php/getCartItems',
+        url: 'final.php/getCartItems',
         method: 'GET',
         dataType: 'json',
         data: { cartID: cartID }
@@ -231,7 +231,7 @@ function updateCartOverview() {
 function addItemToCart(productID, button) {
     var qty = $(button).closest('tr').find('select').val();
     $.ajax({
-        url: 'http://172.17.12.44/cse383_final/final.php/addItemToCart',
+        url: 'final.php/addItemToCart',
         method: 'POST',
         dataType: 'json',
         data: {
@@ -257,7 +257,7 @@ function addItemToCart(productID, button) {
 
 function updateCartDisplay() {
     $.ajax({
-        url: 'http://172.17.12.44/cse383_final/final.php/getCartDetails',
+        url: 'final.php/getCartDetails',
         method: 'GET',
         dataType: 'json',
         data: { cartID: cartID }
@@ -295,7 +295,7 @@ function updateCartDisplay() {
 
 function removeItemFromCart(cartID, productID) {
     $.ajax({
-        url: 'http://172.17.12.44/cse383_final/final.php/RemoveitemFromCart',
+        url: 'final.php/RemoveitemFromCart',
         method: 'POST',
         dataType: 'json',
         data: {
@@ -317,7 +317,7 @@ function removeItemFromCart(cartID, productID) {
 
 function updateCartItemQuantity(cartID, productID, newQty) {
     $.ajax({
-        url: 'http://172.17.12.44/cse383_final/final.php/updateCartItemQuantity',
+        url: 'final.php/updateCartItemQuantity',
         method: 'POST',
         dataType: 'json',
         data: {
@@ -445,7 +445,7 @@ function makeSale() {
 // function updatePrintableOrder() {
 //     console.log("orderprint: " + cartIDPrintOrder);
 //     $.ajax({
-//         url: 'http://172.17.12.44/cse383_final/final.php/getCartItemsForPrint',
+//         url: 'final.php/getCartItemsForPrint',
 //         method: 'GET',
 //         dataType: 'json',
 //         data: { cartID: cartIDPrintOrder }
@@ -477,7 +477,7 @@ function makeSale() {
 // function updateCostDisplayPrintOrder()
 // {
 //     $.ajax({
-//         url: 'http://172.17.12.44/cse383_final/final.php/getCartDetails',
+//         url: 'final.php/getCartDetails',
 //         method: 'GET',
 //         dataType: 'json',
 //         data: { cartID: cartIDPrintOrder }
@@ -516,7 +516,7 @@ function updatePrintableOrder() {
     console.log("orderprint: " + cartIDPrintOrder);
 
     $.ajax({
-        url: 'http://172.17.12.44/cse383_final/final.php/getCartCompleteDetailsForPrint',
+        url: 'final.php/getCartCompleteDetailsForPrint',
         method: 'GET',
         dataType: 'json',
         data: { cartID: cartIDPrintOrder }
@@ -574,7 +574,7 @@ function filterOrders() {
     var endDate = $('#endDate').val() || " ";
 
     $.ajax({
-        url: 'http://172.17.12.44/cse383_final/final.php/FindClosedCarts',
+        url: 'final.php/FindClosedCarts',
         method: 'GET',
         dataType: 'json',
         data: {
@@ -618,7 +618,7 @@ function viewOrderDetails(orderID) {
     $('#orderDetailsTable tbody').empty();
     // Fetch and populate data
     $.ajax({
-        url: 'http://172.17.12.44/cse383_final/final.php/getCartItemsForPrint',
+        url: 'final.php/getCartItemsForPrint',
         method: 'GET',
         dataType: 'json',
         data: { cartID: cartIDForViewOrderDetails }
@@ -649,7 +649,7 @@ function viewOrderDetails(orderID) {
 function updateOrderTotalInViewOrder(orderID) {
     cartIDForViewOrderDetails = orderID;
     $.ajax({
-        url: 'http://172.17.12.44/cse383_final/final.php/getCartDetails',
+        url: 'final.php/getCartDetails',
         method: 'GET',
         dataType: 'json',
         data: { cartID: cartIDForViewOrderDetails }
